@@ -10,40 +10,73 @@ export type ValidationResult = {
 
 export class PasswordValidator {
     static Validate(password: string): ValidationResult {
-        const errors: ValidationError[] = [];
+        
+        const lengthValidation = this.ValidateLength(password);
+        const digitValidation = this.ValidateDigit(password);
+        const upperCaseValidation = this.ValidateUpperCase(password);
 
-        // Validate length
+        return this.CombineResults(lengthValidation, digitValidation, upperCaseValidation);
+    }
+
+    private static ValidateLength(password: string): ValidationResult {
         if (password.length < 5 || password.length > 15) {
-            errors.push({
-                type: 'InvalidLengthError',
-                message: 'Password must be between 5 and 15 characters long.'
-            });
+            return {
+                result: false,
+                errors: [
+                    {
+                        type: 'InvalidLengthError',
+                        message: 'Password must be between 5 and 15 characters long.'
+                    }
+                ]
+            };
         }
+        return { result: true, errors: [] };
+    }
 
-        // Validate presence of at least one digit
-        const hasDigit = /\d/.test(password);
-        if (!hasDigit) {
-            errors.push({
-                type: 'NoDigitError',
-                message: 'Password must contain at least one digit.'
-            });
+    private static ValidateDigit(password: string): ValidationResult {
+        if (!/\d/.test(password)) {
+            return {
+                result: false,
+                errors: [
+                    {
+                        type: 'NoDigitError',
+                        message: 'Password must contain at least one digit.'
+                    }
+                ]
+            };
         }
+        return { result: true, errors: [] };
+    }
 
-         // Validate presence of at least one uppercase letter
-         const hasUpperCase = /[A-Z]/.test(password);
-         if (!hasUpperCase) {
-             errors.push({
-                 type: 'NoUpperCaseCharacterError',
-                 message: 'Password must contain at least one upper case letter.'
-             });
-         } 
+    private static ValidateUpperCase(password: string): ValidationResult {
+        if (!/[A-Z]/.test(password)) {
+            return {
+                result: false,
+                errors: [
+                    {
+                        type: 'NoUpperCaseCharacterError',
+                        message: 'Password must contain at least one upper case letter.'
+                    }
+                ]
+            };
+        }
+        return { result: true, errors: [] };
+    }
 
-        // Result based on whether any errors were found
-        const result = errors.length === 0;
+    private static CombineResults(...results: ValidationResult[]): ValidationResult {
+        const combinedErrors: ValidationError[] = [];
+        let allPass = true;
+
+        for (const result of results) {
+            if (!result.result) {
+                allPass = false;
+                combinedErrors.push(...result.errors);
+            }
+        }
 
         return {
-            result,
-            errors
+            result: allPass,
+            errors: combinedErrors
         };
     }
 }
