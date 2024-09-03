@@ -132,9 +132,9 @@ describe('password validator', () => {
 
   describe('Password must contain at least one uppercase letter', () => {
 
-    test('"lowercaseonly" returns a false-y response because it lacks an uppercase letter', () => {
+    test('"maxwell1_c" returns a false-y response because it lacks an uppercase letter', () => {
       // arrange
-      const password = 'lowercaseonly1'; // No uppercase letters
+      const password = 'maxwell1_c';
   
       // act
       const validationResult = PasswordValidator.Validate(password);
