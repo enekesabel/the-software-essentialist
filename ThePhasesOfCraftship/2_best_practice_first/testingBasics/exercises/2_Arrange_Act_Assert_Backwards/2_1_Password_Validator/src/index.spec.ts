@@ -30,28 +30,13 @@ import { PasswordValidator } from ".";
 
 describe('password validator', () => {
 
-  test.skip('hello', () => {
+  it('Should list all the occurring validation errors', () => {
     // arrange
+    const pasword = '';
 
     // act
 
-    const validationResult = {
-      result: false,
-      errors: [
-        {
-          type: 'InvalidLengthError',
-          message: 'Password must be between 5 and 15 characters long.'
-        },
-        {
-          type: 'NoDigitError',
-          message: 'Password must contain at least one digit.'
-        },
-        {
-          type: 'NoUpperCaseCharacterError',
-          message: 'Password must contain at least one upper case letter.'
-        }
-      ]
-    };
+    const validationResult = PasswordValidator.Validate(pasword);
 
     // assert
     expect(validationResult.result).toBe(false);
