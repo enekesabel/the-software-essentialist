@@ -28,8 +28,23 @@ ValidationResponse:
 
 describe('password validator', () => {
 
-  test('hello', () => {
-    expect("between 5 and 15").toContain('5 and 15')
+  test.skip('hello', () => {
+    // arrange
+
+    // act
+
+    const validationResult = {
+      result: false,
+      errors: [
+        'InvalidLengthError',
+        'NoDigitError',
+        'NoUppercaseCharacterError'
+      ]
+    };
+
+    // assert
+    expect(validationResult.result).toBe(false);
+    expect(validationResult.errors).toHaveLength(3);
   })
 })
 
