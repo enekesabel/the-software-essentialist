@@ -102,9 +102,9 @@ describe('password validator', () => {
 
   describe('Password must contain at least one digit', () => {
 
-    test('"noDigitPassword" returns a false-y response because it lacks a digit', () => {
+    test('"maxwellTheBe" returns a false-y response because it lacks a digit', () => {
       // arrange
-      const password = 'noDigitPassword';
+      const password = 'maxwellTheBe';
   
       // act
       const validationResult = PasswordValidator.Validate(password);
@@ -148,14 +148,14 @@ describe('password validator', () => {
     
     test('"Password1" returns a truthy response because it contains an uppercase letter', () => {
       // arrange
-      const password = 'Password1'; // Contains the uppercase letter 'P'
+      const password = 'Password1';
   
       // act
       const validationResult = PasswordValidator.Validate(password);
   
       // assert
       expect(validationResult.result).toBe(true);
-      expect(validationResult.errors).toHaveLength(0); // No errors expected
+      expect(validationResult.errors).toHaveLength(0);
     });
   
   });
