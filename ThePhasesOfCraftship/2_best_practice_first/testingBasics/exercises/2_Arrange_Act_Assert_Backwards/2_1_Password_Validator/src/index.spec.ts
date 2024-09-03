@@ -96,6 +96,18 @@ describe('password validator', () => {
     expect(validationResult.errors[0].type).toBe('InvalidLengthError');
     expect(validationResult.errors[0].message).toBe('Password must be between 5 and 15 characters long.');
   });
+
+  test('"theValid1" returns a truthy response because it is within the valid length range', () => {
+    // arrange
+    const password = 'theValid1'; // 9 characters, valid
+
+    // act
+    const validationResult = PasswordValidator.Validate(password);
+
+    // assert
+    expect(validationResult.result).toBe(true);
+    expect(validationResult.errors).toHaveLength(0); // No errors expected
+  });
 })
 
 
