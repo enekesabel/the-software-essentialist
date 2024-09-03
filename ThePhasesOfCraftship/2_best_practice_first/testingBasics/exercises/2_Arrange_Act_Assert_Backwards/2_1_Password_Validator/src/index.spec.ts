@@ -69,8 +69,8 @@ describe('password validator', () => {
     // Parameterized tests for invalid length cases
     test.each([
       'thePhysical1234567',  // exceeds 15 characters
-      'abc1',                 // exactly 4 characters (pne below the limit)
-      'abcdefghijklmno1'     // exactly 16 characters (one over the limit)
+      'Abc1',                 // exactly 4 characters (pne below the limit)
+      'Abcdefghijklmno1'     // exactly 16 characters (one over the limit)
     ])('"%s" returns a false-y response due to invalid length', (password) => {
 
       // act
@@ -85,8 +85,8 @@ describe('password validator', () => {
 
     // Parameterized test for valid length case
     test.each([
-      'abcd1',               // exactly 5 characters (valid edge case)
-      'abcdefghij12345',     // exactly 15 characters (valid edge case)
+      'Abcd1',               // exactly 5 characters (valid edge case)
+      'Abcdefghij12345',     // exactly 15 characters (valid edge case)
       'theValid1',  // within the valid length range
     ])('"%s" returns a truthy response because it is within the valid length range', (password) => {
 
@@ -118,7 +118,7 @@ describe('password validator', () => {
   
     test('"password1" returns a truthy response because it contains a digit', () => {
       // arrange
-      const password = 'password1';
+      const password = 'Password1';
   
       // act
       const validationResult = PasswordValidator.Validate(password);
@@ -128,6 +128,24 @@ describe('password validator', () => {
       expect(validationResult.errors).toHaveLength(0);
     });
 
+  });
+
+  describe('Password must contain at least one uppercase letter', () => {
+
+    test('"lowercaseonly" returns a false-y response because it lacks an uppercase letter', () => {
+      // arrange
+      const password = 'lowercaseonly1'; // No uppercase letters
+  
+      // act
+      const validationResult = PasswordValidator.Validate(password);
+  
+      // assert
+      expect(validationResult.result).toBe(false);
+      expect(validationResult.errors).toHaveLength(1);
+      expect(validationResult.errors[0].type).toBe('NoUpperCaseCharacterError');
+      expect(validationResult.errors[0].message).toBe('Password must contain at least one upper case letter.');
+    });
+  
   });
 })
 

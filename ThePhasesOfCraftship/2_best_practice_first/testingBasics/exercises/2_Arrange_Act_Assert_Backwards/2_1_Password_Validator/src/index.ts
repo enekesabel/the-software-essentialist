@@ -29,6 +29,15 @@ export class PasswordValidator {
             });
         }
 
+         // Validate presence of at least one uppercase letter
+         const hasUpperCase = /[A-Z]/.test(password);
+         if (!hasUpperCase) {
+             errors.push({
+                 type: 'NoUpperCaseCharacterError',
+                 message: 'Password must contain at least one upper case letter.'
+             });
+         } 
+
         // Result based on whether any errors were found
         const result = errors.length === 0;
 
