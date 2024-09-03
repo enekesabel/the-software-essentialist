@@ -1,15 +1,19 @@
-import { PasswordValidator } from ".";
+import { PasswordValidator, ValidationResult } from ".";
 
+// Utility function for asserting successful validation
+function expectToPass(validationResult: ValidationResult) {
+    expect(validationResult.result).toBe(true);
+    expect(validationResult.errors).toHaveLength(0);
+}
 
 describe('password validator', () => {
 
   it('Should list all the occurring validation errors', () => {
     // arrange
-    const pasword = '';
+    const password = '';
 
     // act
-
-    const validationResult = PasswordValidator.Validate(pasword);
+    const validationResult = PasswordValidator.Validate(password);
 
     // assert
     expect(validationResult.result).toBe(false);
@@ -20,17 +24,16 @@ describe('password validator', () => {
     expect(validationResult.errors[1].message).toBe('Password must contain at least one digit.');
     expect(validationResult.errors[2].type).toBe('NoUpperCaseCharacterError');
     expect(validationResult.errors[2].message).toBe('Password must contain at least one upper case letter.');
-  })
+  });
 
-  describe('The password must be between 5 and 15 characters long', ()=>{
+  describe('The password must be between 5 and 15 characters long', () => {
 
     // Parameterized tests for invalid length cases
     test.each([
       'thePhysical1234567',  // exceeds 15 characters
-      'Abc1',                 // exactly 4 characters (pne below the limit)
+      'Abc1',                 // exactly 4 characters (one below the limit)
       'Abcdefghijklmno1'     // exactly 16 characters (one over the limit)
     ])('"%s" returns a false-y response due to invalid length', (password) => {
-
       // act
       const validationResult = PasswordValidator.Validate(password);
 
@@ -41,19 +44,17 @@ describe('password validator', () => {
       expect(validationResult.errors[0].message).toBe('Password must be between 5 and 15 characters long.');
     });
 
-    // Parameterized test for valid length case
+    // Parameterized test for valid length cases
     test.each([
       'Abcd1',               // exactly 5 characters (valid edge case)
       'Abcdefghij12345',     // exactly 15 characters (valid edge case)
       'theValid1',  // within the valid length range
     ])('"%s" returns a truthy response because it is within the valid length range', (password) => {
-
       // act
       const validationResult = PasswordValidator.Validate(password);
 
       // assert
-      expect(validationResult.result).toBe(true);
-      expect(validationResult.errors).toHaveLength(0);
+      expectToPass(validationResult);
     });
 
   });
@@ -82,8 +83,7 @@ describe('password validator', () => {
       const validationResult = PasswordValidator.Validate(password);
   
       // assert
-      expect(validationResult.result).toBe(true);
-      expect(validationResult.errors).toHaveLength(0);
+      expectToPass(validationResult);
     });
 
   });
@@ -112,11 +112,8 @@ describe('password validator', () => {
       const validationResult = PasswordValidator.Validate(password);
   
       // assert
-      expect(validationResult.result).toBe(true);
-      expect(validationResult.errors).toHaveLength(0);
+      expectToPass(validationResult);
     });
   
   });
-})
-
-
+});

@@ -3,7 +3,7 @@ type ValidationError = {
     message: string;
 };
 
-type ValidationResult = {
+export type ValidationResult = {
     result: boolean;
     errors: ValidationError[];
 };
