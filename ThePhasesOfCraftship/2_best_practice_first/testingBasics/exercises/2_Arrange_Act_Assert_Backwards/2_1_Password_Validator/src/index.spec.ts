@@ -69,8 +69,8 @@ describe('password validator', () => {
     // Parameterized tests for invalid length cases
     test.each([
       'thePhysical1234567',  // exceeds 15 characters
-      'abcd',                 // exactly 4 characters (pne below the limit)
-      'abcdefghijklmnop'     // exactly 16 characters (one over the limit)
+      'abc1',                 // exactly 4 characters (pne below the limit)
+      'abcdefghijklmno1'     // exactly 16 characters (one over the limit)
     ])('"%s" returns a false-y response due to invalid length', (password) => {
 
       // act
@@ -85,7 +85,7 @@ describe('password validator', () => {
 
     // Parameterized test for valid length case
     test.each([
-      'abcde',               // exactly 5 characters (valid edge case)
+      'abcd1',               // exactly 5 characters (valid edge case)
       'abcdefghij12345',     // exactly 15 characters (valid edge case)
       'theValid1',  // within the valid length range
     ])('"%s" returns a truthy response because it is within the valid length range', (password) => {
@@ -98,6 +98,24 @@ describe('password validator', () => {
       expect(validationResult.errors).toHaveLength(0);
     });
 
+  });
+
+  describe('Password must contain at least one digit', () => {
+
+    test('"noDigitPassword" returns a false-y response because it lacks a digit', () => {
+      // arrange
+      const password = 'noDigitPassword';
+  
+      // act
+      const validationResult = PasswordValidator.Validate(password);
+  
+      // assert
+      expect(validationResult.result).toBe(false);
+      expect(validationResult.errors).toHaveLength(1);
+      expect(validationResult.errors[0].type).toBe('NoDigitError');
+      expect(validationResult.errors[0].message).toBe('Password must contain at least one digit.');
+    });
+  
   });
 })
 
