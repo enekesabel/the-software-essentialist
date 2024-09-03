@@ -81,8 +81,21 @@ describe('password validator', () => {
       expect(validationResult.errors[0].type).toBe('InvalidLengthError');
       expect(validationResult.errors[0].message).toBe('Password must be between 5 and 15 characters long.');
     })
-
   })
+
+  test('"abc" returns a false-y response because of being shorter than 5 characters', () => {
+    // arrange
+    const password = 'abc';
+
+    // act
+    const validationResult = PasswordValidator.Validate(password);
+
+    // assert
+    expect(validationResult.result).toBe(false);
+    expect(validationResult.errors).toHaveLength(1);
+    expect(validationResult.errors[0].type).toBe('InvalidLengthError');
+    expect(validationResult.errors[0].message).toBe('Password must be between 5 and 15 characters long.');
+  });
 })
 
 
