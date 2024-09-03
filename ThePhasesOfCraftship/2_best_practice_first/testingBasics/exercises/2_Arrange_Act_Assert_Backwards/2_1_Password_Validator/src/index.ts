@@ -1,6 +1,16 @@
+type ValidationError = {
+    type: string;
+    message: string;
+};
+
+type ValidationResult = {
+    result: boolean;
+    errors: ValidationError[];
+};
+
 export class PasswordValidator {
-    static Validate(password: string) {
-        const errors: { type: string; message: string }[] = [];
+    static Validate(password: string): ValidationResult {
+        const errors: ValidationError[] = [];
 
         // Validate length
         if (password.length < 5 || password.length > 15) {

@@ -118,16 +118,16 @@ describe('password validator', () => {
   
     test('"password1" returns a truthy response because it contains a digit', () => {
       // arrange
-      const password = 'password1'; // Contains the digit '1'
+      const password = 'password1';
   
       // act
       const validationResult = PasswordValidator.Validate(password);
   
       // assert
       expect(validationResult.result).toBe(true);
-      expect(validationResult.errors).toHaveLength(0); // No errors expected
+      expect(validationResult.errors).toHaveLength(0);
     });
-    
+
   });
 })
 
