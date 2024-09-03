@@ -145,6 +145,18 @@ describe('password validator', () => {
       expect(validationResult.errors[0].type).toBe('NoUpperCaseCharacterError');
       expect(validationResult.errors[0].message).toBe('Password must contain at least one upper case letter.');
     });
+    
+    test('"Password1" returns a truthy response because it contains an uppercase letter', () => {
+      // arrange
+      const password = 'Password1'; // Contains the uppercase letter 'P'
+  
+      // act
+      const validationResult = PasswordValidator.Validate(password);
+  
+      // assert
+      expect(validationResult.result).toBe(true);
+      expect(validationResult.errors).toHaveLength(0); // No errors expected
+    });
   
   });
 })
