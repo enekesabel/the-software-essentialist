@@ -25,6 +25,8 @@ ValidationResponse:
 - holds the list of errors.
 */
 
+import { PasswordValidator } from ".";
+
 
 describe('password validator', () => {
 
@@ -60,6 +62,26 @@ describe('password validator', () => {
     expect(validationResult.errors[1].message).toBe('Password must contain at least one digit.');
     expect(validationResult.errors[2].type).toBe('NoUpperCaseCharacterError');
     expect(validationResult.errors[2].message).toBe('Password must contain at least one upper case letter.');
+  })
+
+  describe('The password must be between 5 and 15 characters long', ()=>{
+
+    test('"thePhysical1234567" returns a false-y response because of exceeding the 15 character length', ()=>{
+      
+      // arrange
+      const password = 'thePhysical1234567';
+
+      // act
+      const validationResult = PasswordValidator.Validate(password);
+
+      // assert
+
+      expect(validationResult.result).toBe(false);
+      expect(validationResult.errors).toHaveLength(1);
+      expect(validationResult.errors[0].type).toBe('InvalidLengthError');
+      expect(validationResult.errors[0].message).toBe('Password must be between 5 and 15 characters long.');
+    })
+
   })
 })
 
