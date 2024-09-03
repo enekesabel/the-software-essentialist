@@ -36,15 +36,30 @@ describe('password validator', () => {
     const validationResult = {
       result: false,
       errors: [
-        'InvalidLengthError',
-        'NoDigitError',
-        'NoUppercaseCharacterError'
+        {
+          type: 'InvalidLengthError',
+          message: 'Password must be between 5 and 15 characters long.'
+        },
+        {
+          type: 'NoDigitError',
+          message: 'Password must contain at least one digit.'
+        },
+        {
+          type: 'NoUpperCaseCharacterError',
+          message: 'Password must contain at least one upper case letter.'
+        }
       ]
     };
 
     // assert
     expect(validationResult.result).toBe(false);
     expect(validationResult.errors).toHaveLength(3);
+    expect(validationResult.errors[0].type).toBe('InvalidLengthError');
+    expect(validationResult.errors[0].message).toBe('Password must be between 5 and 15 characters long.');
+    expect(validationResult.errors[1].type).toBe('NoDigitError');
+    expect(validationResult.errors[1].message).toBe('Password must contain at least one digit.');
+    expect(validationResult.errors[2].type).toBe('NoUpperCaseCharacterError');
+    expect(validationResult.errors[2].message).toBe('Password must contain at least one upper case letter.');
   })
 })
 
