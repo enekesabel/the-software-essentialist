@@ -28,37 +28,14 @@ import { militaryTimeValidator } from "."
 
 describe('military time validator', () => {
 
-    it('Should tell that "00:00 - 00:00" is a valid military time string.', ()=>{
-        // arrange
-        const time = "00:00 - 00:00";
-
-        // act
+    it.each([
+        ["00:00 - 00:00", true],
+        ["0:00 - 00:00", false],
+        ["00:00 : 00:00", false],
+        ["00:00-00:00", false]
+    ])('Correctly identifies "%s" as a %s military time string.', (time: string, expected: boolean) => {
         const result = militaryTimeValidator(time);
-
-        // assert
-        expect(result).toBe(true);
-    })
-
-    it('Should tell that "0:00 - 00:00" is not a valid military time string.', ()=>{
-        // arrange
-        const time = "0:00 - 00:00";
-
-        // act
-        const result = militaryTimeValidator(time);
-
-        // assert
-        expect(result).toBe(false);
-    })
-
-    it('Should tell that "00:00 : 00:00" is not a valid military time string.', () => {
-        // arrange
-        const time = "00:00 : 00:00";
-    
-        // act
-        const result = militaryTimeValidator(time);
-    
-        // assert
-        expect(result).toBe(false);
+        expect(result).toBe(expected);
     });
 
 })
