@@ -42,30 +42,16 @@ describe('military time validator', () => {
         });
     })
     
-    describe('It should make sure that the hours are in the 0-23 range.', ()=>{
-        it('Correctly identifies "24:00 - 00:00" as an invalid military time string, since the start hours are over 23', () => {
-            // arrange
-            const time = "24:00 - 00:00";
-        
-            // act
+    describe('It should make sure that the hours are in the 0-23 range.', () => {
+        test.each([
+            ["24:00 - 00:00", false],
+            ["00:00 - 24:00", false]
+        ])('Correctly identifies "%s" as an invalid military time string.', (time: string, expected: boolean) => {
             const result = militaryTimeValidator(time);
-        
-            // assert
-            expect(result).toBe(false);
+            expect(result).toBe(expected);
         });
+    });
     
-        it('Correctly identifies "00:00 - 24:00" as an invalid military time string, since the end hours are over 23', () => {
-            // arrange
-            const time = "00:00 - 24:00";
-        
-            // act
-            const result = militaryTimeValidator(time);
-        
-            // assert
-            expect(result).toBe(false);
-        });    
-    })
-
     describe('It should make sure that the minutes are in the 0-59 range.', ()=>{
         it('Correctly identifies "00:60 - 00:00" as an invalid military time string, since the start minutes are over 59', () => {
             // arrange
