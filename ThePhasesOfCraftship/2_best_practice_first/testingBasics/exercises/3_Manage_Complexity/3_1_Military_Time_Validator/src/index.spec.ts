@@ -54,28 +54,14 @@ describe('military time validator', () => {
         });
     });
 
-    describe('It should make sure that the minutes are in the 0-59 range.', ()=>{
-        it('Correctly identifies "00:60 - 00:00" as an invalid military time string, since the start minutes are over 59', () => {
-            // arrange
-            const time = "00:60 - 00:00";
-        
-            // act
+    describe('It should make sure that the minutes are in the 0-59 range.', () => {
+        test.each([
+            ["00:60 - 00:00", false],
+            ["00:00 - 00:60", false]
+        ])('Correctly identifies "%s" as an invalid military time string.', (time: string, expected: boolean) => {
             const result = militaryTimeValidator(time);
-        
-            // assert
-            expect(result).toBe(false);
+            expect(result).toBe(expected);
         });
-    
-        it('Correctly identifies "00:00 - 00:60" as an invalid military time string, since the end minutes are over 59', () => {
-            // arrange
-            const time = "00:00 - 00:60";
-        
-            // act
-            const result = militaryTimeValidator(time);
-        
-            // assert
-            expect(result).toBe(false);
-        });
-    })
+    });    
     
 })
