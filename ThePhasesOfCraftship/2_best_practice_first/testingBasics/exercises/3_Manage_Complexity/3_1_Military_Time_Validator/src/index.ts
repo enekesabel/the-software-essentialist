@@ -5,7 +5,7 @@ const validateHour = (hour:string) => {
 }
 
 const validateMinute = (minute:string) => {
-    const parsedMinute = parseInt(minute);
+    const parsedMinute = Number(minute);
     return !isNaN(parsedMinute) && parsedMinute < 60;
 }
 
