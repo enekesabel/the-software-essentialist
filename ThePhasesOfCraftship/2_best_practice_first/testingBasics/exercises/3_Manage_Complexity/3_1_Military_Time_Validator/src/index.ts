@@ -6,7 +6,8 @@ const validateHour = (hour:string) => {
 }
 
 const hour = (time: string) => time.slice(0, 2);
-const startTime = (militaryTime: string) => militaryTime.slice(0, 4);
+const minute = (time: string) => time.slice(3, 5);
+const startTime = (militaryTime: string) => militaryTime.slice(0, 5);
 const endTime = (militaryTime: string) => militaryTime.slice(8, 13);
 
 export const militaryTimeValidator = (militaryTime: string): boolean => {
@@ -27,11 +28,11 @@ export const militaryTimeValidator = (militaryTime: string): boolean => {
         return false
     }
 
-    if(parseInt(militaryTime.slice(3, 5)) > 59){
+    if(parseInt(minute(startTime(militaryTime))) > 59){
         return false
     }
 
-    if(parseInt(militaryTime.slice(11, 13)) > 59){
+    if(parseInt(minute(endTime(militaryTime))) > 59){
         return false
     }
 
