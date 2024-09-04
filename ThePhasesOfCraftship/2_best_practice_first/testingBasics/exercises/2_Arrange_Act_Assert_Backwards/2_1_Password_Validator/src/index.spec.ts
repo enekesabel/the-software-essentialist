@@ -1,4 +1,4 @@
-import { PasswordValidator, ValidationResult, ValidationError } from ".";
+import { PasswordValidator, ValidationResult, ValidationError, ValidationErrorType } from ".";
 
 // Utility function for asserting successful validation
 function expectToPass(validationResult: ValidationResult) {
@@ -24,9 +24,9 @@ describe('password validator', () => {
 
     // assert
     expectToFail(validationResult,
-      { type: 'InvalidLengthError', message: 'Password must be between 5 and 15 characters long.' },
-      { type: 'NoDigitError', message: 'Password must contain at least one digit.' },
-      { type: 'NoUpperCaseCharacterError', message: 'Password must contain at least one upper case letter.' }
+      { type: ValidationErrorType.InvalidLengthError, message: 'Password must be between 5 and 15 characters long.' },
+      { type: ValidationErrorType.NoDigitError, message: 'Password must contain at least one digit.' },
+      { type: ValidationErrorType.NoUpperCaseCharacterError, message: 'Password must contain at least one upper case letter.' }
     );
   });
 
@@ -43,7 +43,7 @@ describe('password validator', () => {
 
       // assert
       expectToFail(validationResult,
-        { type: 'InvalidLengthError', message: 'Password must be between 5 and 15 characters long.' }
+        { type: ValidationErrorType.InvalidLengthError, message: 'Password must be between 5 and 15 characters long.' }
       );
     });
 
@@ -73,7 +73,7 @@ describe('password validator', () => {
 
       // assert
       expectToFail(validationResult,
-        { type: 'NoDigitError', message: 'Password must contain at least one digit.' }
+        { type: ValidationErrorType.NoDigitError, message: 'Password must contain at least one digit.' }
       );
     });
 
@@ -101,7 +101,7 @@ describe('password validator', () => {
 
       // assert
       expectToFail(validationResult,
-        { type: 'NoUpperCaseCharacterError', message: 'Password must contain at least one upper case letter.' }
+        { type: ValidationErrorType.NoUpperCaseCharacterError, message: 'Password must contain at least one upper case letter.' }
       );
     });
     

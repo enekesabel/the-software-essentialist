@@ -1,5 +1,5 @@
 export type ValidationError = {
-    type: string;
+    type: ValidationErrorType;
     message: string;
 };
 
@@ -7,6 +7,12 @@ export type ValidationResult = {
     result: boolean;
     errors: ReadonlyArray<ValidationError>;
 };
+
+export enum ValidationErrorType {
+    InvalidLengthError,
+    NoDigitError,
+    NoUpperCaseCharacterError
+}
 
 class ValidationResultImpl implements ValidationResult {
     readonly result: boolean;
@@ -36,7 +42,7 @@ export class PasswordValidator {
         if (password.length < 5 || password.length > 15) {
             return new ValidationResultImpl(false, [
                 {
-                    type: 'InvalidLengthError',
+                    type: ValidationErrorType.InvalidLengthError,
                     message: 'Password must be between 5 and 15 characters long.'
                 }
             ]);
@@ -48,7 +54,7 @@ export class PasswordValidator {
         if (!/\d/.test(password)) {
             return new ValidationResultImpl(false, [
                 {
-                    type: 'NoDigitError',
+                    type: ValidationErrorType.NoDigitError,
                     message: 'Password must contain at least one digit.'
                 }
             ]);
@@ -60,7 +66,7 @@ export class PasswordValidator {
         if (!/[A-Z]/.test(password)) {
             return new ValidationResultImpl(false, [
                 {
-                    type: 'NoUpperCaseCharacterError',
+                    type: ValidationErrorType.NoUpperCaseCharacterError,
                     message: 'Password must contain at least one upper case letter.'
                 }
             ]);
