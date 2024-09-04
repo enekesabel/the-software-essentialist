@@ -1,8 +1,11 @@
-import { time } from "console";
-
 const validateHour = (hour:string) => {
     const parsedHour = parseInt(hour);
     return !isNaN(parsedHour) && parsedHour < 24;
+}
+
+const validateMinute = (minute:string) => {
+    const parsedMinute = parseInt(minute);
+    return !isNaN(parsedMinute) && parsedMinute < 60;
 }
 
 const hour = (time: string) => time.slice(0, 2);
@@ -28,11 +31,11 @@ export const militaryTimeValidator = (militaryTime: string): boolean => {
         return false
     }
 
-    if(parseInt(minute(startTime(militaryTime))) > 59){
+    if(!validateMinute(minute(startTime(militaryTime)))){
         return false
     }
 
-    if(parseInt(minute(endTime(militaryTime))) > 59){
+    if(!validateMinute(minute(endTime(militaryTime)))){
         return false
     }
 
