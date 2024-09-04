@@ -57,8 +57,10 @@ describe('military time validator', () => {
     describe('It should make sure that the minutes are in the 0-59 range.', () => {
         test.each([
             ["00:60 - 00:00", false],
-            ["00:00 - 00:60", false]
-        ])('Correctly identifies "%s" as an invalid military time string.', (time: string, expected: boolean) => {
+            ["00:00 - 00:60", false],
+            ["00:59 - 00:00", true],
+            ["00:00 - 00:59", true]
+        ])('Correctly identifies "%s" as a %s military time string.', (time: string, expected: boolean) => {
             const result = militaryTimeValidator(time);
             expect(result).toBe(expected);
         });
