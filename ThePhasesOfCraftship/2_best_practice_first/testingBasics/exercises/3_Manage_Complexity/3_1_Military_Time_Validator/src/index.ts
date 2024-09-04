@@ -8,10 +8,10 @@ const validateMinute = (minute:string) => {
     return !isNaN(parsedMinute) && parsedMinute < 60;
 }
 
-const hour = (time: string) => time.slice(0, 2);
-const minute = (time: string) => time.slice(3, 5);
-const startTime = (militaryTime: string) => militaryTime.slice(0, 5);
-const endTime = (militaryTime: string) => militaryTime.slice(8, 13);
+const getHour = (time: string) => time.slice(0, 2);
+const getMinute = (time: string) => time.slice(3, 5);
+const getStartTime = (militaryTime: string) => militaryTime.slice(0, 5);
+const getEndTime = (militaryTime: string) => militaryTime.slice(8, 13);
 
 export const militaryTimeValidator = (militaryTime: string): boolean => {
     const formatMatches =  militaryTime.length === 13 &&
@@ -23,19 +23,19 @@ export const militaryTimeValidator = (militaryTime: string): boolean => {
         return false;
     }
 
-    if(!validateHour(hour(startTime(militaryTime)))){
+    if(!validateHour(getHour(getStartTime(militaryTime)))){
         return false
     }
 
-    if(!validateHour(hour(endTime(militaryTime)))){
+    if(!validateHour(getHour(getEndTime(militaryTime)))){
         return false
     }
 
-    if(!validateMinute(minute(startTime(militaryTime)))){
+    if(!validateMinute(getMinute(getStartTime(militaryTime)))){
         return false
     }
 
-    if(!validateMinute(minute(endTime(militaryTime)))){
+    if(!validateMinute(getMinute(getEndTime(militaryTime)))){
         return false
     }
 
