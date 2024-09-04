@@ -47,7 +47,12 @@ describe('military time validator', () => {
             ["24:00 - 00:00", false],
             ["00:00 - 24:00", false],
             ["23:00 - 00:00", true],
-            ["00:00 - 23:00", true]
+            ["00:00 - 23:00", true],
+
+            // tests from the assignment
+            ["22:00 - 23:12", true],
+            ["25:00 - 12:23", false],
+            ["01:12 - 14:32", true],
         ])('Correctly identifies "%s" as a %s military time string.', (time: string, expected: boolean) => {
             const result = militaryTimeValidator(time);
             expect(result).toBe(expected);
