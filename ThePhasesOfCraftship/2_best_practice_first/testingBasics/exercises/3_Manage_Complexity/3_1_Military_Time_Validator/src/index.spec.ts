@@ -24,7 +24,7 @@ Assignment examples:
 
 */
 
-import { militrayTimeValidator } from "."
+import { militaryTimeValidator } from "."
 
 describe('military time validator', () => {
 
@@ -33,7 +33,7 @@ describe('military time validator', () => {
         const time = "00:00 - 00:00";
 
         // act
-        const result = militrayTimeValidator(time);
+        const result = militaryTimeValidator(time);
 
         // assert
         expect(result).toBe(true);
@@ -44,7 +44,7 @@ describe('military time validator', () => {
         const time = "0:00 - 00:00";
 
         // act
-        const result = militrayTimeValidator(time);
+        const result = militaryTimeValidator(time);
 
         // assert
         expect(result).toBe(false);

@@ -1,3 +1,3 @@
-export const militrayTimeValidator = (time: string): boolean => {
+export const militaryTimeValidator = (time: string): boolean => {
     return time.length === 13
 }
