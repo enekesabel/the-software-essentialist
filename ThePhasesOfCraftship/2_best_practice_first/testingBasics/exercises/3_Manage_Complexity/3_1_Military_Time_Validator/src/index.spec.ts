@@ -28,18 +28,20 @@ import { militaryTimeValidator } from "."
 
 describe('military time validator', () => {
 
-    it.each([
-        ["00:00 - 00:00", true],
-        ["0:00 - 00:00", false],
-        ["00:00 : 00:00", false],
-        ["00-00 - 00:00", false],
-        ["00:00 - 00-00", false],
-        ["00:00-00:00", false]
-    ])('Correctly identifies "%s" as a %s military time string.', (time: string, expected: boolean) => {
-        const result = militaryTimeValidator(time);
-        expect(result).toBe(expected);
-    });
-
+    describe('It should enforce the "HH:MM - HH:MM" format', ()=>{
+        it.each([
+            ["00:00 - 00:00", true],
+            ["0:00 - 00:00", false],
+            ["00:00 : 00:00", false],
+            ["00-00 - 00:00", false],
+            ["00:00 - 00-00", false],
+            ["00:00-00:00", false]
+        ])('Correctly identifies "%s" as a %s military time string.', (time: string, expected: boolean) => {
+            const result = militaryTimeValidator(time);
+            expect(result).toBe(expected);
+        });
+    })
+    
     it('Correctly identifies "24:00 - 00:00" as an invalid military time string, since the start hours are over 23', () => {
         // arrange
         const time = "24:00 - 00:00";
