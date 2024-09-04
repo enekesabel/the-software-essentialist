@@ -8,7 +8,7 @@ export const militaryTimeValidator = (time: string): boolean => {
         return false;
     }
 
-    if(parseInt(time.slice(0, 2)) > 23){
+    if(parseInt(time.slice(0, 2)) > 23 || isNaN(parseInt(time.slice(0, 2)))){
         return false
     }
 
