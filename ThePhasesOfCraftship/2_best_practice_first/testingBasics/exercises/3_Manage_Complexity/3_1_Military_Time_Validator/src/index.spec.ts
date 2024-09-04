@@ -39,4 +39,15 @@ describe('military time validator', () => {
         expect(result).toBe(true);
     })
 
+    it('Should tell that "0:00 - 00:00" is not a valid military time string.', ()=>{
+        // arrange
+        const time = "0:00 - 00:00";
+
+        // act
+        const result = militrayTimeValidator(time);
+
+        // assert
+        expect(result).toBe(false);
+    })
+
 })

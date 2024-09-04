@@ -1,3 +1,3 @@
 export const militrayTimeValidator = (time: string): boolean => {
-    return true;
+    return time.length === 13
 }
