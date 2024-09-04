@@ -18,16 +18,19 @@ class ValidationResultImpl implements ValidationResult {
     readonly result: boolean;
     readonly errors: ReadonlyArray<ValidationError>;
 
+    constructor(result: true);
+    constructor(result: false, errors: ValidationError[]);
     constructor(result: boolean, errors: ValidationError[] = []) {
         this.result = result;
         this.errors = errors;
     }
 
     combine(other: ValidationResultImpl): ValidationResultImpl {
-        const combinedErrors = [...this.errors, ...other.errors];
-        const allPass = this.result && other.result;
+        if(this.result && other.result){
+            return new ValidationResultImpl(true);
+        }
 
-        return new ValidationResultImpl(allPass, combinedErrors);
+        return new ValidationResultImpl(false, [...this.errors, ...other.errors]);
     }
 }
 
