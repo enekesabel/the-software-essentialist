@@ -8,11 +8,11 @@ export const militaryTimeValidator = (time: string): boolean => {
         return false;
     }
 
-    if(parseInt(time.slice(0, 2)) > 24){
+    if(parseInt(time.slice(0, 2)) > 23){
         return false
     }
 
-    if(parseInt(time.slice(8, 10)) > 24){
+    if(parseInt(time.slice(8, 10)) > 23){
         return false
     }
 
