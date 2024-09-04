@@ -30,12 +30,13 @@ describe('military time validator', () => {
 
     it('Should tell that "00:00 - 00:00" is a valid military time string.', ()=>{
         // arrange
+        const time = "00:00 - 00:00";
 
         // act
-        const result = militrayTimeValidator();
+        const result = militrayTimeValidator(time);
 
         // assert
-        expect(true).toBe(true);
+        expect(result).toBe(true);
     })
 
 })
