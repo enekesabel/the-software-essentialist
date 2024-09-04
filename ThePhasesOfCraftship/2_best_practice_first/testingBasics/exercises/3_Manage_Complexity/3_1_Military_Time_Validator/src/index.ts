@@ -7,6 +7,7 @@ const validateHour = (hour:string) => {
 
 const hour = (time: string) => time.slice(0, 2);
 const startTime = (militaryTime: string) => militaryTime.slice(0, 4);
+const endTime = (militaryTime: string) => militaryTime.slice(8, 13);
 
 export const militaryTimeValidator = (militaryTime: string): boolean => {
     const formatMatches =  militaryTime.length === 13 &&
@@ -22,7 +23,7 @@ export const militaryTimeValidator = (militaryTime: string): boolean => {
         return false
     }
 
-    if(!validateHour(militaryTime.slice(8, 10))){
+    if(!validateHour(hour(endTime(militaryTime)))){
         return false
     }
 
