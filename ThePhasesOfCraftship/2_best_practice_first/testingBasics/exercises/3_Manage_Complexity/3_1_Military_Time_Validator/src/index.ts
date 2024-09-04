@@ -23,21 +23,11 @@ export const militaryTimeValidator = (militaryTime: string): boolean => {
         return false;
     }
 
-    if(!validateHour(getHour(getStartTime(militaryTime)))){
-        return false
-    }
+    const startTime = getStartTime(militaryTime);
+    const endTime = getEndTime(militaryTime);
 
-    if(!validateHour(getHour(getEndTime(militaryTime)))){
-        return false
-    }
-
-    if(!validateMinute(getMinute(getStartTime(militaryTime)))){
-        return false
-    }
-
-    if(!validateMinute(getMinute(getEndTime(militaryTime)))){
-        return false
-    }
-
-    return true;
+    return validateHour(getHour(startTime)) &&
+    validateHour(getHour(endTime)) &&
+    validateMinute(getMinute(startTime)) &&
+    validateMinute(getMinute(endTime))
 }
