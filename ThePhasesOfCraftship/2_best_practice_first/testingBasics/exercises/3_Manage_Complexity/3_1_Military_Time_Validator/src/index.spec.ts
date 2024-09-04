@@ -62,4 +62,14 @@ describe('military time validator', () => {
         expect(result).toBe(false);
     });
 
+    it('Correctly identifies "00:60 - 00:00" as an invalid military time string, since the start minutes are over 59', () => {
+        // arrange
+        const time = "00:60 - 00:00";
+    
+        // act
+        const result = militaryTimeValidator(time);
+    
+        // assert
+        expect(result).toBe(false);
+    });
 })
