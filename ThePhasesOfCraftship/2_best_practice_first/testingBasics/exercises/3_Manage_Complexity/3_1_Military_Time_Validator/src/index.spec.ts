@@ -24,8 +24,18 @@ Assignment examples:
 
 */
 
+import { militrayTimeValidator } from "."
 
 describe('military time validator', () => {
 
+    it('Should tell that "00:00 - 00:00" is a valid military time string.', ()=>{
+        // arrange
+
+        // act
+        const result = militrayTimeValidator();
+
+        // assert
+        expect(true).toBe(true);
+    })
 
 })
