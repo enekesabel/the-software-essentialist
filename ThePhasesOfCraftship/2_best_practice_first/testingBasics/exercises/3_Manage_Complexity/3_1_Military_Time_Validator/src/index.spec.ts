@@ -65,26 +65,29 @@ describe('military time validator', () => {
             expect(result).toBe(false);
         });    
     })
-    
-    it('Correctly identifies "00:60 - 00:00" as an invalid military time string, since the start minutes are over 59', () => {
-        // arrange
-        const time = "00:60 - 00:00";
-    
-        // act
-        const result = militaryTimeValidator(time);
-    
-        // assert
-        expect(result).toBe(false);
-    });
 
-    it('Correctly identifies "00:00 - 00:60" as an invalid military time string, since the end minutes are over 59', () => {
-        // arrange
-        const time = "00:00 - 00:60";
+    describe('It should make sure that the minutes are in the 0-59 range.', ()=>{
+        it('Correctly identifies "00:60 - 00:00" as an invalid military time string, since the start minutes are over 59', () => {
+            // arrange
+            const time = "00:60 - 00:00";
+        
+            // act
+            const result = militaryTimeValidator(time);
+        
+            // assert
+            expect(result).toBe(false);
+        });
     
-        // act
-        const result = militaryTimeValidator(time);
+        it('Correctly identifies "00:00 - 00:60" as an invalid military time string, since the end minutes are over 59', () => {
+            // arrange
+            const time = "00:00 - 00:60";
+        
+            // act
+            const result = militaryTimeValidator(time);
+        
+            // assert
+            expect(result).toBe(false);
+        });
+    })
     
-        // assert
-        expect(result).toBe(false);
-    });
 })
