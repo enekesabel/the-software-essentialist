@@ -1,3 +1,8 @@
+const validateHour = (hour:string) => {
+    const parsedHour = parseInt(hour);
+    return !isNaN(parsedHour) && parsedHour < 24;
+}
+
 export const militaryTimeValidator = (time: string): boolean => {
     const formatMatches =  time.length === 13 &&
     time.indexOf(' - ') > 0 &&
@@ -8,13 +13,11 @@ export const militaryTimeValidator = (time: string): boolean => {
         return false;
     }
 
-    const startHour = parseInt(time.slice(0, 2));
-    if(isNaN(startHour) || startHour > 23){
+    if(!validateHour(time.slice(0, 2))){
         return false
     }
 
-    const endHour = parseInt(time.slice(8, 10));
-    if(isNaN(endHour) || endHour > 23){
+    if(!validateHour(time.slice(8, 10))){
         return false
     }
 
