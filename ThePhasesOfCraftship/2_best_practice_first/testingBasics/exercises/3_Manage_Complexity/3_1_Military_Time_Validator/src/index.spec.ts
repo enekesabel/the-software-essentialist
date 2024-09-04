@@ -40,4 +40,15 @@ describe('military time validator', () => {
         expect(result).toBe(expected);
     });
 
+    it('Correctly identifies "25:00 - 00:00" as an invalid military time string, since the start hours are over 24', () => {
+        // arrange
+        const time = "25:00 - 00:00";
+    
+        // act
+        const result = militaryTimeValidator(time);
+    
+        // assert
+        expect(result).toBe(false);
+    });
+
 })
