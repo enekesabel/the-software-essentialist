@@ -1,5 +1,6 @@
 const validateHour = (hour:string) => {
-    const parsedHour = parseInt(hour);
+    
+    const parsedHour = Number(hour);
     return !isNaN(parsedHour) && parsedHour < 24;
 }
 
