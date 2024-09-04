@@ -9,12 +9,12 @@ export const militaryTimeValidator = (time: string): boolean => {
     }
 
     const startHour = parseInt(time.slice(0, 2));
-
     if(isNaN(startHour) || startHour > 23){
         return false
     }
 
-    if(parseInt(time.slice(8, 10)) > 23){
+    const endHour = parseInt(time.slice(8, 10));
+    if(isNaN(endHour) || endHour > 23){
         return false
     }
 
