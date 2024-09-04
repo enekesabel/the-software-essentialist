@@ -33,6 +33,7 @@ describe('military time validator', () => {
         ["0:00 - 00:00", false],
         ["00:00 : 00:00", false],
         ["00-00 - 00:00", false],
+        ["00:00 - 00-00", false],
         ["00:00-00:00", false]
     ])('Correctly identifies "%s" as a %s military time string.', (time: string, expected: boolean) => {
         const result = militaryTimeValidator(time);
