@@ -20,5 +20,9 @@ export const militaryTimeValidator = (time: string): boolean => {
         return false
     }
 
+    if(parseInt(time.slice(11, 13)) > 59){
+        return false
+    }
+
     return true;
 }
