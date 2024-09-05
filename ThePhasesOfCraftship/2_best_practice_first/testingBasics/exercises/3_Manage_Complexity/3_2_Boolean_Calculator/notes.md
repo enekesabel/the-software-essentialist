@@ -76,3 +76,29 @@
       
     > "TRUE OR FALSE AND NOT FALSE" ->  
     "(TRUE OR (FALSE AND (NOT (FALSE))))"
+
+
+### ARCH
+
+Algorithm to group expressions by precedence
+
+    1. Extract Expressions from parentheses in order -> recursive // enough in V2
+    2. Group NOTs in order
+    3. Group ANDs in order
+    4. Group ORs in order
+
+    Input:
+
+    TRUE AND (FALSE AND (TRUE OR FALSE)) AND NOT TRUE AND TRUE OR NOT (FALSE OR TRUE) OR TRUE
+
+    TRUE AND [FALSE AND (TRUE OR FALSE)] AND NOT TRUE AND TRUE OR NOT (FALSE OR TRUE) OR TRUE // extract expressions
+    TRUE AND [FALSE AND [TRUE OR FALSE]] AND NOT TRUE AND TRUE OR NOT (FALSE OR TRUE) OR TRUE // extract expressions
+    TRUE AND [FALSE AND [TRUE OR FALSE]] AND NOT TRUE AND TRUE OR NOT [FALSE OR TRUE] OR TRUE // extract expressions
+
+    TRUE AND [FALSE AND [TRUE OR FALSE]] AND [NOT TRUE] AND TRUE OR NOT [FALSE OR TRUE] OR TRUE // Group NOTs in order
+    TRUE AND [FALSE AND [TRUE OR FALSE]] AND [NOT TRUE] AND TRUE OR [NOT [FALSE OR TRUE]] OR TRUE // Group NOTs in order
+    [TRUE AND [FALSE AND [TRUE OR FALSE]]] AND [NOT TRUE] AND TRUE OR [NOT [FALSE OR TRUE]] OR TRUE // Group ANDs in order
+    [[TRUE AND [FALSE AND [TRUE OR FALSE]]] AND [NOT TRUE]] AND TRUE OR [NOT [FALSE OR TRUE]] OR TRUE // Group ANDs in order
+    [[[TRUE AND [FALSE AND [TRUE OR FALSE]]] AND [NOT TRUE]] AND TRUE] OR [NOT [FALSE OR TRUE]] OR TRUE // Group ANDs in order
+    [[[[TRUE AND [FALSE AND [TRUE OR FALSE]]] AND [NOT TRUE]] AND TRUE] OR [NOT [FALSE OR TRUE]]] OR TRUE // Group ORs in order
+    [[[[[TRUE AND [FALSE AND [TRUE OR FALSE]]] AND [NOT TRUE]] AND TRUE] OR [NOT [FALSE OR TRUE]]] OR TRUE] // Group ORs in order
