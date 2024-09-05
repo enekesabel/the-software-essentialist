@@ -32,4 +32,26 @@ describe('ExpressionParser', () => {
         expect(() => ExpressionParser.Parse(invalidStr)).toThrowError('Invalid boolean string');
     });
 
+    it('Should be able to parse "NOT TRUE" as ["NOT", true]', () => {
+        // arrange
+        const booleanStr = 'NOT TRUE';
+
+        // act
+        const expression = ExpressionParser.Parse(booleanStr);
+
+        // assert
+        expect(expression).toEqual(['NOT', true]);
+    });
+
+    it('Should be able to parse "NOT FALSE" as ["NOT", false]', () => {
+        // arrange
+        const booleanStr = 'NOT FALSE';
+
+        // act
+        const expression = ExpressionParser.Parse(booleanStr);
+
+        // assert
+        expect(expression).toEqual(['NOT', false]);
+    });
+
 });
