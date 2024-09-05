@@ -11,6 +11,7 @@ describe('Expression', () => {
             { boolString: 'FALSE', expected: [Value.FALSE] },
             { boolString: 'NOT FALSE', expected: [Operator.NOT, Value.FALSE] },
             { boolString: 'NOT TRUE', expected: [Operator.NOT, Value.TRUE] },
+            { boolString: 'TRUE AND TRUE', expected: [Value.TRUE, Operator.AND, Value.TRUE] }
         ])('Should parse "$boolString" correctly', ({ boolString, expected }) => {
             // act
             const expression = new Expression(boolString);
