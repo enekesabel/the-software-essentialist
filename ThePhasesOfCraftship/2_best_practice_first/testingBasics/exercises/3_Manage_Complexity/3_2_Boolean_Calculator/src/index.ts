@@ -1,19 +1,35 @@
+const parseValue = (value:string) => {
+    if(value === 'TRUE'){
+        return true;
+    }
+    if(value === 'FALSE'){
+        return false;
+    }
+}
+
 export class BooleanCalculator {
     static Evaluate(expression: string): boolean {
 
         const words = expression.split(' ');
 
-        let result;
-        let negate = false;
-        words.forEach(word=>{
-            if(word === 'TRUE'){
-                result = negate? false : true;
-            }
-            if(word === 'FALSE'){
-                result = negate? true : false;
-            }
-            if(word === 'NOT'){
-                negate = true;
+        let result: boolean | undefined;
+        words.forEach((word, index)=>{
+
+            const previousWord = words[index - 1];
+
+            switch (previousWord) {
+                case undefined:
+                    result = parseValue(word);
+                    break;
+                case 'NOT':
+                    result = !parseValue(word);
+                    break;
+                case 'AND':
+                    result = result && parseValue(word)
+                    break;
+                case 'OR':
+                    result = result || parseValue(word)
+                    break;
             }
         })
 
