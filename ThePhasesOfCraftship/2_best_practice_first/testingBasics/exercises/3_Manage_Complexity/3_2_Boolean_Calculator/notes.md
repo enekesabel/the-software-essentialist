@@ -76,3 +76,7 @@
       
     > "TRUE OR FALSE AND NOT FALSE" ->  
     "(TRUE OR (FALSE AND (NOT (FALSE))))"
+
+### ARCH
+
+![alt text](BooleanCalculator.svg "Title")
