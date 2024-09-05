@@ -1,4 +1,5 @@
 import { Expression } from "./Expression"
+import { Operator } from "./Operator";
 import { Value } from "./Value";
 
 describe('Expression', ()=>{
@@ -27,6 +28,17 @@ describe('Expression', ()=>{
             expect(expression.list[0]).toBe(Value.FALSE);
         })
 
+        it('Should be able to parse "NOT FALSE" as [Operator.NOT, Value.FALSE]', ()=>{
+            // arrange
+            const boolString = 'NOT FALSE';
+
+            // act
+            const expression = new Expression(boolString);
+
+            // assert
+            expect(expression.list).toMatchObject([Operator.NOT, Value.FALSE]);
+        })
+        
     })
 
 })
