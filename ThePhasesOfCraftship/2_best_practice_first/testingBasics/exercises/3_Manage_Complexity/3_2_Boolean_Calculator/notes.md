@@ -50,5 +50,26 @@
         > "TRUE OR FALSE AND NOT FALSE" -> true
         
         "TRUE OR (FALSE AND (NOT (FALSE)))" -> true
-
+- validate expression
+    - Expression must start with Expression or NOT
+        > (()) -> ok  
+        (NOT ()) -> ok  
+        (OR ()) -> not ok
+        (AND ()) -> not ok
+    - Expression must be followed by Binary Operator or nothing
+        >() -> ok  
+        () OR -> not ok  
+        () AND -> not ok
+    - Binary Operator must be followed by Expression
+        >() OR () -> ok  
+        () OR AND () -> not ok
+        () AND OR () -> not ok
+    - `NOT` Operator must be followed by Expression
+        >NOT () -> ok  
+        NOT AND -> not ok  
+        NOT OR -> not ok
+    - Parenthesis
+        - Each opening bracket must be closed by a closing bracket.
+        - Opening brackets must be closed in the correct order. That means no closing bracket should interrupt the corresponding pair of an opening bracket.
+        - Each closing bracket must have an associated opening bracket before it.
     
