@@ -2,43 +2,22 @@ import { Expression } from "./Expression"
 import { Operator } from "./Operator";
 import { Value } from "./Value";
 
-describe('Expression', ()=>{
+describe('Expression', () => {
 
-    describe('It should be able to parse a valid boolean string into a list of Values, Operators and Expressions', ()=>{
-        
-        it('Should be able to parse "TRUE" as Value.TRUE', ()=>{
-            // arrange
-            const boolString = 'TRUE';
+    describe('It should be able to parse a valid boolean string into a list of Values, Operators and Expressions', () => {
 
+        it.each([
+            { boolString: 'TRUE', expected: [Value.TRUE] },
+            { boolString: 'FALSE', expected: [Value.FALSE] },
+            { boolString: 'NOT FALSE', expected: [Operator.NOT, Value.FALSE] }
+        ])('Should parse "$boolString" correctly', ({ boolString, expected }) => {
             // act
             const expression = new Expression(boolString);
 
             // assert
-            expect(expression.list[0]).toBe(Value.TRUE);
-        })
-        
-        it('Should be able to parse "FALSE" as Value.FALSE', ()=>{
-            // arrange
-            const boolString = 'FALSE';
+            expect(expression.list).toMatchObject(expected);
+        });
 
-            // act
-            const expression = new Expression(boolString);
+    });
 
-            // assert
-            expect(expression.list[0]).toBe(Value.FALSE);
-        })
-
-        it('Should be able to parse "NOT FALSE" as [Operator.NOT, Value.FALSE]', ()=>{
-            // arrange
-            const boolString = 'NOT FALSE';
-
-            // act
-            const expression = new Expression(boolString);
-
-            // assert
-            expect(expression.list).toMatchObject([Operator.NOT, Value.FALSE]);
-        })
-        
-    })
-
-})
+});
