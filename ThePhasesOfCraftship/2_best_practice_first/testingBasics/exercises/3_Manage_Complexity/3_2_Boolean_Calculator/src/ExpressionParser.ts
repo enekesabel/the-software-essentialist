@@ -28,6 +28,14 @@ export class ExpressionParser {
             }
         }
 
-        return expression;
+        const andCount = words.filter(word => word === 'AND').length;
+        for(let i = 0; i < andCount; i++) {
+            const index = expression.indexOf('AND');
+
+            expression.splice(index - 1, 3, [expression[index - 1], 'AND', expression[index + 1]]);
+        }
+
+        // if there is only 1 item in the expression, wich is an Expression itself, return that Expression
+        return expression.length === 1 && Array.isArray(expression[0]) ? expression[0] : expression;
     }
 }
