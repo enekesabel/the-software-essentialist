@@ -4,6 +4,19 @@
 
 ### FIND
 
+#### Terms
+
+- Value: `TRUE`, `FALSE`
+- Operator:
+    - Unary: `NOT`
+    - Binary: `AND`, `OR`
+- Expression: 
+    - a valid group of Values, Operators and Expressions
+    - can be grouped by parenthesis to express precedence
+        - `#Value` -> `(#Value)`
+        - `NOT #Value/#Expression` -> `(NOT #Value/#Expression)`
+        - `#Value/#Expression #BinaryOperator #Value/#Expression` -> `(#Value/#Expression #BinaryOperator #Value/#Expression)`
+
 #### Responsibilities
 - evaluate string boolean expression to boolean result
 - evaluate expressions
@@ -37,6 +50,5 @@
         > "TRUE OR FALSE AND NOT FALSE" -> true
         
         "TRUE OR (FALSE AND (NOT (FALSE)))" -> true
-
 
     
