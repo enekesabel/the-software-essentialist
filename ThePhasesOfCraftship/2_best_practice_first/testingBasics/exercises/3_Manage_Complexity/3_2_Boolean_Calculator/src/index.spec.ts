@@ -22,4 +22,10 @@ describe('boolean calculator', () => {
         }).toThrowError("Invalid boolean expression");
     });
 
+    it('Should evaluate "NOT TRUE" to false', () => {
+        const expression = 'NOT TRUE';
+        const result = BooleanCalculator.Evaluate(expression);
+        expect(result).toBe(false);
+    });
+
 });
