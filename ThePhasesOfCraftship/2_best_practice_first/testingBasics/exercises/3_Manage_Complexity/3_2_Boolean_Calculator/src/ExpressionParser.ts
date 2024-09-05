@@ -6,6 +6,12 @@ type Expression = (Value|Operator|Expression)[];
 
 export class ExpressionParser {
     static Parse(booleanString: string): Expression {
-        return [true];
+        if (booleanString === 'TRUE') {
+            return [true];
+        }
+        if (booleanString === 'FALSE') {
+            return [false];
+        }
+        throw new Error('Invalid boolean string');
     }
 }
