@@ -18,7 +18,6 @@
         - `#Value/#Expression #BinaryOperator #Value/#Expression` -> `(#Value/#Expression #BinaryOperator #Value/#Expression)`
 
 #### Responsibilities
-- evaluate string boolean expression to boolean result
 - evaluate expressions
     - Single values
         > "TRUE" -> true
@@ -77,4 +76,3 @@
       
     > "TRUE OR FALSE AND NOT FALSE" ->  
     "(TRUE OR (FALSE AND (NOT (FALSE))))"
-
