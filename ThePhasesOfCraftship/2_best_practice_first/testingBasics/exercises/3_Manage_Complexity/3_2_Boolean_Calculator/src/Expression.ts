@@ -21,6 +21,9 @@ export class Expression {
                 case 'AND': 
                     this.list.push(Operator.AND);
                     break;
+                case 'OR': 
+                    this.list.push(Operator.OR);
+                    break;
             }
         });
     }
