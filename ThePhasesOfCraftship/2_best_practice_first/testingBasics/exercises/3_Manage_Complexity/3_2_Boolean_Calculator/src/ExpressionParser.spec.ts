@@ -2,26 +2,17 @@ import { ExpressionParser } from "./ExpressionParser";
 
 describe('ExpressionParser', () => {
 
-    it('Should be able to parse "TRUE" as true', () => {
-        // arrange
-        const booleanStr = 'TRUE';
-
+    it.each([
+        { booleanStr: 'TRUE', expected: [true] },
+        { booleanStr: 'FALSE', expected: [false] },
+        { booleanStr: 'NOT TRUE', expected: ['NOT', true] },
+        { booleanStr: 'NOT FALSE', expected: ['NOT', false] }
+    ])('Should correctly parse "$booleanStr"', ({ booleanStr, expected }) => {
         // act
         const expression = ExpressionParser.Parse(booleanStr);
 
         // assert
-        expect(expression).toEqual([true]);
-    });
-
-    it('Should be able to parse "FALSE" as false', () => {
-        // arrange
-        const booleanStr = 'FALSE';
-
-        // act
-        const expression = ExpressionParser.Parse(booleanStr);
-
-        // assert
-        expect(expression).toEqual([false]);
+        expect(expression).toEqual(expected);
     });
 
     it('Should throw an error for an invalid boolean string', () => {
@@ -30,28 +21,6 @@ describe('ExpressionParser', () => {
 
         // act & assert
         expect(() => ExpressionParser.Parse(invalidStr)).toThrowError('Invalid boolean string');
-    });
-
-    it('Should be able to parse "NOT TRUE" as ["NOT", true]', () => {
-        // arrange
-        const booleanStr = 'NOT TRUE';
-
-        // act
-        const expression = ExpressionParser.Parse(booleanStr);
-
-        // assert
-        expect(expression).toEqual(['NOT', true]);
-    });
-
-    it('Should be able to parse "NOT FALSE" as ["NOT", false]', () => {
-        // arrange
-        const booleanStr = 'NOT FALSE';
-
-        // act
-        const expression = ExpressionParser.Parse(booleanStr);
-
-        // assert
-        expect(expression).toEqual(['NOT', false]);
     });
 
 });
