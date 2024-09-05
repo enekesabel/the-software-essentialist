@@ -43,12 +43,10 @@
     - Combination of operators w/ precedence
         > NOT > AND > OR
 
-        > "TRUE OR TRUE OR TRUE AND FALSE" -> true
-        
+        > "TRUE OR TRUE OR TRUE AND FALSE" -> true  
         "TRUE OR (TRUE OR (TRUE AND FALSE))" -> true
 
-        > "TRUE OR FALSE AND NOT FALSE" -> true
-        
+        > "TRUE OR FALSE AND NOT FALSE" -> true  
         "TRUE OR (FALSE AND (NOT (FALSE)))" -> true
 - validate expression
     - Expression must start with Expression or NOT
@@ -72,4 +70,11 @@
         - Each opening bracket must be closed by a closing bracket.
         - Opening brackets must be closed in the correct order. That means no closing bracket should interrupt the corresponding pair of an opening bracket.
         - Each closing bracket must have an associated opening bracket before it.
-    
+- identify expressions
+    - from a valid boolean string, based on the rules, the Boolean Calculator should be able to build up the Expressions
+    > "TRUE OR TRUE OR TRUE AND FALSE" ->  
+    "(TRUE OR (TRUE OR (TRUE AND FALSE)))"  
+      
+    > "TRUE OR FALSE AND NOT FALSE" ->  
+    "(TRUE OR (FALSE AND (NOT (FALSE))))"
+
