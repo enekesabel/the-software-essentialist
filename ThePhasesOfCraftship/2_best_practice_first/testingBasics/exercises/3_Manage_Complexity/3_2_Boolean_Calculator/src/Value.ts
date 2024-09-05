@@ -1,4 +1,4 @@
 export enum Value {
-    TRUE = 1,
-    FALSE = 0,
+    TRUE = 'TRUE',
+    FALSE = 'FALSE',
 }

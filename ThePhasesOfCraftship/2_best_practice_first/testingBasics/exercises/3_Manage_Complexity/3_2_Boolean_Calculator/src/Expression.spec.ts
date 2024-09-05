@@ -21,6 +21,25 @@ describe('Expression', () => {
             expect(expression.list).toMatchObject(expected);
         });
 
+        describe('Should be able to parse complex expressions', ()=>{
+
+            it('Should be able to parse "TRUE AND TRUE AND FALSE"', ()=>{
+                // arrange
+                const boolString = 'TRUE AND TRUE AND FALSE';
+                // ((TRUE AND TRUE) AND FALSE)
+
+                // act
+                const expression = new Expression(boolString);
+
+                // assert
+                expect(expression.list).toMatchObject([
+                    new Expression('TRUE AND TRUE'),
+                    Operator.AND,
+                    Value.FALSE
+                ]);
+            })
+        })
+
     });
 
 });

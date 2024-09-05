@@ -1,5 +1,5 @@
 export enum Operator {
-    NOT,
-    AND,
-    OR
+    NOT = 'NOT',
+    AND = 'AND',
+    OR = 'OR'
 }
