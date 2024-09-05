@@ -15,6 +15,17 @@ describe('Expression', ()=>{
             // assert
             expect(expression.list[0]).toBe(Value.TRUE);
         })
+        
+        it('Should be able to parse "FALSE" as Value.FALSE', ()=>{
+            // arrange
+            const boolString = 'FALSE';
+
+            // act
+            const expression = new Expression(boolString);
+
+            // assert
+            expect(expression.list[0]).toBe(Value.FALSE);
+        })
 
     })
 

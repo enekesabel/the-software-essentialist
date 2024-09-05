@@ -5,7 +5,7 @@ export class Expression {
     readonly list: Value[];
 
     constructor(boolString: string){
-        this.list = [Value.TRUE]
+        this.list = [boolString === 'TRUE' ? Value.TRUE : Value.FALSE]
     }
 
 }
