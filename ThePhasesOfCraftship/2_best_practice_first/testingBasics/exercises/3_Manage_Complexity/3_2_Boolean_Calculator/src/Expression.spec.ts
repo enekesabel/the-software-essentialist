@@ -9,7 +9,8 @@ describe('Expression', () => {
         it.each([
             { boolString: 'TRUE', expected: [Value.TRUE] },
             { boolString: 'FALSE', expected: [Value.FALSE] },
-            { boolString: 'NOT FALSE', expected: [Operator.NOT, Value.FALSE] }
+            { boolString: 'NOT FALSE', expected: [Operator.NOT, Value.FALSE] },
+            { boolString: 'NOT TRUE', expected: [Operator.NOT, Value.TRUE] },
         ])('Should parse "$boolString" correctly', ({ boolString, expected }) => {
             // act
             const expression = new Expression(boolString);
