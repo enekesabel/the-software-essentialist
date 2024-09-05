@@ -28,6 +28,12 @@ export class ExpressionParser {
             }
         }
 
+        const notCount = words.filter(word => word === 'NOT').length;
+        for (let i = 0; i < notCount; i++) {
+            const index = expression.lastIndexOf('NOT');
+            expression.splice(index, 2, ['NOT', expression[index + 1]]);
+        }
+
         const andCount = words.filter(word => word === 'AND').length;
         for(let i = 0; i < andCount; i++) {
             const index = expression.indexOf('AND');

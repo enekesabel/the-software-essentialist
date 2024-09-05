@@ -12,6 +12,9 @@ describe('ExpressionParser', () => {
         { booleanStr: 'FALSE AND TRUE', expected: [false, 'AND', true] },
         { booleanStr: 'FALSE AND FALSE', expected: [false, 'AND', false] },
         { booleanStr: 'FALSE AND FALSE AND FALSE AND FALSE', expected: [[[false, 'AND', false], 'AND', false], 'AND', false] },
+        { booleanStr: 'TRUE AND NOT FALSE', expected: [true, 'AND', ['NOT', false]] },
+        { booleanStr: 'NOT NOT NOT FALSE', expected: ['NOT', ['NOT', ['NOT', false]]] },
+        { booleanStr: 'NOT TRUE AND NOT NOT FALSE', expected: [['NOT', true], 'AND', ['NOT', ['NOT', false]]] },
     ])('Should correctly parse "$booleanStr"', ({ booleanStr, expected }) => {
         // act
         const expression = ExpressionParser.Parse(booleanStr);
