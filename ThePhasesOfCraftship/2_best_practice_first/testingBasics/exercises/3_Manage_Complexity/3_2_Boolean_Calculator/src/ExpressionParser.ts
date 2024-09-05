@@ -23,6 +23,9 @@ export class ExpressionParser {
                 case 'AND':
                     expression.push('AND');
                     break;
+                case 'OR':
+                    expression.push('OR');
+                    break;
                 default:
                     throw new Error('Invalid boolean string');
             }
@@ -39,6 +42,12 @@ export class ExpressionParser {
             const index = expression.indexOf('AND');
 
             expression.splice(index - 1, 3, [expression[index - 1], 'AND', expression[index + 1]]);
+        }
+
+        const orCount = words.filter(word => word === 'OR').length;
+        for (let i = 0; i < orCount; i++) {
+            const index = expression.indexOf('OR');
+            expression.splice(index - 1, 3, [expression[index - 1], 'OR', expression[index + 1]]);
         }
 
         // if there is only 1 item in the expression, wich is an Expression itself, return that Expression
