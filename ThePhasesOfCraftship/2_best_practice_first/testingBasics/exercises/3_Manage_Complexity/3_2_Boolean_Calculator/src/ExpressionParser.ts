@@ -1,18 +1,29 @@
 import { Evaluateable } from "./Evaluateable";
 import { And, Not, Or } from "./Operator";
+import { splitByParentheses } from "./splitByParentheses";
 import { FALSE, TRUE, Value } from "./Value";
 
 const validWords = ['TRUE', 'FALSE', 'NOT', 'AND', 'OR'];
 
 export class ExpressionParser {
     static Parse(booleanString: string): Evaluateable {
-        const words = booleanString.split(' ')
-
-        if(words.some(word => !validWords.includes(word))) {
-            throw new Error('Invalid boolean string');
-        }
-
-        const temp: (string | Evaluateable)[] = words.map(word=>{
+        const sections = splitByParentheses(booleanString).map((section, index, array) => {
+            // odd sections were wrapped in parentheses, even sections were not
+            if(array.length > 1 && index % 2 === 0) {
+                return this.Parse(section);
+            }
+            
+            const words = section.split(' ')
+            if(words.some(word => !validWords.includes(word))) {
+                throw new Error('Invalid boolean string');
+            }
+            return words;
+        }).flat();
+    
+        return this.ParseWithoutParenthesis(sections);
+    }
+    private static ParseWithoutParenthesis(expression: (string | Evaluateable)[]): Evaluateable {
+        const temp: (string | Evaluateable)[] = expression.map(word=>{
             return word === 'TRUE' ? TRUE : word === 'FALSE' ? FALSE : word
         });
 

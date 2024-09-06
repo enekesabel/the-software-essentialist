@@ -32,6 +32,18 @@ describe('ExpressionParser', () => {
         expect(expression).toMatchObject(expected);
     });
 
+    it('Should correctly parse expression with parentheses', () => {
+        // arrange
+        const booleanStr = '(TRUE)';
+
+        // act
+        const expression = ExpressionParser.Parse(booleanStr);
+
+        // assert
+        expect(expression.toString()).toEqual(TRUE.toString());
+        expect(expression).toMatchObject(TRUE);
+    });
+
     it.each([
         { booleanStr: '', expectedError: 'Invalid boolean string' },
         { booleanStr: 'something', expectedError: 'Invalid boolean string' },
