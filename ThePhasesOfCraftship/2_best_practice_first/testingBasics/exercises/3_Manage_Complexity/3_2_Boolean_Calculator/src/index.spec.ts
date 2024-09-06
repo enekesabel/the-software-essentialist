@@ -20,4 +20,12 @@ describe('boolean calculator', () => {
         expect(result).toBe(expected);
     });
 
+    it('Should throw an error for an invalid boolean string', () => {
+        // arrange
+        const invalidStr = 'INVALID';
+
+        // act & assert
+        expect(() => BooleanCalculator.Evaluate(invalidStr)).toThrowError('Invalid boolean string');
+    });
+
 })

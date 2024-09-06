@@ -32,12 +32,23 @@ describe('ExpressionParser', () => {
         expect(expression).toMatchObject(expected);
     });
 
-    it('Should throw an error for an invalid boolean string', () => {
-        // arrange
-        const invalidStr = 'INVALID';
-
+    it.each([
+        { booleanStr: '', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'something', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'something else', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'NOT', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'OR', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'AND', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'OR TRUE', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'AND TRUE', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'TRUE OR', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'TRUE AND', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'TRUE OR AND TRUE', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'TRUE AND OR TRUE', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'NOT AND TRUE', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'NOT OR TRUE', expectedError: 'Invalid boolean string' },
+    ])('Should throw an error for an invalid boolean string "$booleanStr"', ({ booleanStr, expectedError }) => {
         // act & assert
-        expect(() => ExpressionParser.Parse(invalidStr)).toThrowError('Invalid boolean string');
+        expect(() => ExpressionParser.Parse(booleanStr)).toThrowError(expectedError);
     });
-
 });
