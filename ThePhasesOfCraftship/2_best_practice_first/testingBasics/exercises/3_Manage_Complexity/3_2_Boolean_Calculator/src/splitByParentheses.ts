@@ -1,4 +1,7 @@
 export const splitByParentheses = (str: string): string[] =>{
+    if(!str.includes('(')) {
+        return [str];
+    }
     const sections: string[] = [];
     let openCount = 0;
     for (let i = 0; i < str.length; i++) {

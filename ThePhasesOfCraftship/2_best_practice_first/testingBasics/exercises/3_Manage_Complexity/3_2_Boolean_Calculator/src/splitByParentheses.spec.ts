@@ -3,6 +3,7 @@ import { splitByParentheses } from "./splitByParentheses";
 describe('splitByParentheses', () => {
 
     it.each([
+        { str: "TRUE", expectedResult: ['TRUE']},
         { str: "(TRUE OR FALSE) AND TRUE", expectedResult: [
             'TRUE OR FALSE',
             'AND TRUE'
