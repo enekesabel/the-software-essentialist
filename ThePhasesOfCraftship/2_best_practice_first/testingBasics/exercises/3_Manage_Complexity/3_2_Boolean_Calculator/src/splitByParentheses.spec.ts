@@ -7,20 +7,19 @@ describe('splitByParentheses', () => {
         for (let i = 0; i < str.length; i++) {
             const char = str[i];
             if(char === '(') {
-                if(openCount === 0) {
-                    result.push('');
-                }
+                openCount === 0 ? result.push('') : result[result.length - 1] += char;
                 openCount++;
-                continue;
-            } 
-            if (char === ')') {
+            } else if (char === ')') {
                 openCount--;
                 if(openCount === 0 && i !== str.length - 1) {
                     result.push('');
+                } 
+                if(openCount !== 0) {
+                    result[result.length - 1] += char;
                 }
-                continue;
+            } else {
+                result[result.length - 1] += char;
             }
-            result[result.length - 1] += char;
         }
 
         return result.map(r=>r.trim());
@@ -33,6 +32,7 @@ describe('splitByParentheses', () => {
         ]},
         { str: "(TRUE OR FALSE)", expectedResult: ['TRUE OR FALSE']},
         { str: "(TRUE) OR (FALSE)", expectedResult: ['TRUE', 'OR', 'FALSE']},
+        { str: "((TRUE OR FALSE) AND TRUE) AND (FALSE OR (TRUE))", expectedResult: ['(TRUE OR FALSE) AND TRUE', 'AND', 'FALSE OR (TRUE)']},
     ])('should split by parentheses $str', ({ str, expectedResult }) => {
         // act
         const result = splitByParentheses(str);
