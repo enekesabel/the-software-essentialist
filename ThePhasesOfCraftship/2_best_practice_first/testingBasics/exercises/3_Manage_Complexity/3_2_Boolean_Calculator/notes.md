@@ -80,7 +80,7 @@
 
 ### ARCH
 
-Algorithm to group expressions by precedence
+A1 - Algorithm to group expressions by precedence
 
     1. Extract Expressions from parentheses in order -> recursive // enough in V2
     2. Group NOTs in order
@@ -102,3 +102,20 @@ Algorithm to group expressions by precedence
     [[[TRUE AND [FALSE AND [TRUE OR FALSE]]] AND [NOT TRUE]] AND TRUE] OR [NOT [FALSE OR TRUE]] OR TRUE // Group ANDs in order
     [[[[TRUE AND [FALSE AND [TRUE OR FALSE]]] AND [NOT TRUE]] AND TRUE] OR [NOT [FALSE OR TRUE]]] OR TRUE // Group ORs in order
     [[[[[TRUE AND [FALSE AND [TRUE OR FALSE]]] AND [NOT TRUE]] AND TRUE] OR [NOT [FALSE OR TRUE]]] OR TRUE] // Group ORs in order
+
+A2 - Algorithm to handle parentheses
+
+    1. Split up string by parentheses
+    2. Turn string in parentheses into expression with Operators using A1 
+        - A1 will invoke A2 recursively if there're parentheses inside parentheses
+    3. Join array
+    4. Run A1 on the whole
+
+    Input:
+
+    (TRUE OR TRUE OR TRUE) AND FALSE AND ((TRUE OR FALSE) AND TRUE) AND FALSE
+
+    (TRUE OR TRUE OR TRUE) | AND FALSE AND | ((TRUE OR FALSE) AND TRUE) | AND FALSE // Split up string by parentheses
+    [[TRUE OR TRUE] OR TRUE] | AND FALSE AND | [[TRUE OR FALSE] AND TRUE] | AND FALSE // Turn string in parentheses into expression
+    [[TRUE OR TRUE] OR TRUE] AND FALSE AND [[TRUE OR FALSE] AND TRUE] AND FALSE // Join
+    [[[[[TRUE OR TRUE] OR TRUE] AND FALSE] AND [[TRUE OR FALSE] AND TRUE]] AND FALSE] // Run A1 on the whole
