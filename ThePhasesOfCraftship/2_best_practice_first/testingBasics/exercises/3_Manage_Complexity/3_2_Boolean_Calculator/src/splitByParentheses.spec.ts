@@ -2,27 +2,30 @@ describe('splitByParentheses', () => {
 
     const splitByParentheses = (str: string): string[] =>{
 
-        const result: string[] = [];
+        const sections: string[] = [];
         let openCount = 0;
         for (let i = 0; i < str.length; i++) {
             const char = str[i];
+            const appendToLastSection = () => sections[sections.length - 1] += char;
+            const startNewSection = () => sections.push('');
+
             if(char === '(') {
-                openCount === 0 ? result.push('') : result[result.length - 1] += char;
+                openCount === 0 ? startNewSection() : appendToLastSection();
                 openCount++;
             } else if (char === ')') {
                 openCount--;
                 if(openCount === 0 && i !== str.length - 1) {
-                    result.push('');
+                    startNewSection();
                 } 
                 if(openCount !== 0) {
-                    result[result.length - 1] += char;
+                    appendToLastSection();
                 }
             } else {
-                result[result.length - 1] += char;
+                appendToLastSection();
             }
         }
 
-        return result.map(r=>r.trim());
+        return sections.map(r=>r.trim());
     }
 
     it.each([
