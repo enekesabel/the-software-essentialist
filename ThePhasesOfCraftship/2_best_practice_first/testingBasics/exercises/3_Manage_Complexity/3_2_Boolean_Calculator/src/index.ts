@@ -1,5 +1,7 @@
+import { ExpressionParser } from "./ExpressionParser";
+
 export class BooleanCalculator {
     static Evaluate(expression: string): boolean {
-        return true;
+        return ExpressionParser.Parse(expression).evaluate();
     }
 }
