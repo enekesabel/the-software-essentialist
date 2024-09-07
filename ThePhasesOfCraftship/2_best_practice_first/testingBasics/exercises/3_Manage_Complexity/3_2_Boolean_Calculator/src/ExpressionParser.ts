@@ -1,5 +1,5 @@
 import { Evaluateable } from "./Evaluateable";
-import { And, Not, Or } from "./Operator";
+import { And, BinaryOperator, Not, Operator, Or, UnaryOperator } from "./Operator";
 import { splitByParentheses } from "./splitByParentheses";
 import { FALSE, TRUE, Value } from "./Value";
 
@@ -21,44 +21,42 @@ export class ExpressionParser {
         
         return this.ParseWithoutParenthesis(sections);
     }
+
+    private static ParseOperator(expression: (string | Evaluateable)[], OperatorClass: new (...params:any) => Operator): (string | Evaluateable)[] {
+        const temp = [...expression];
+        const name = OperatorClass.name.toUpperCase();
+        const count = temp.filter(word => word === name).length;
+        const isUnary = OperatorClass.prototype instanceof UnaryOperator;
+        for (let i = 0; i < count; i++) {
+            const index = isUnary ? temp.lastIndexOf(name) : temp.indexOf(name);
+            if(isUnary) {
+                const value = temp[index + 1];
+                if(!(value instanceof Evaluateable)) {
+                    throw new Error('Invalid boolean string');
+                }
+                temp.splice(index, 2, new OperatorClass(value));
+            } else {
+                const left = temp[index - 1];
+                const right = temp[index + 1];
+                if(!(left instanceof Evaluateable && right instanceof Evaluateable)) {
+                    throw new Error('Invalid boolean string');
+                }
+
+                temp.splice(index - 1, 3, new OperatorClass(left, right));
+            }
+        }
+        
+        return temp;
+    }
+
     private static ParseWithoutParenthesis(expression: (string | Evaluateable)[]): Evaluateable {
-        const temp: (string | Evaluateable)[] = expression.map(word=>{
+        let temp: (string | Evaluateable)[] = expression.map(word=>{
             return word === 'TRUE' ? TRUE : word === 'FALSE' ? FALSE : word
         });
 
-        const notCount = temp.filter(word => word === 'NOT').length;
-        for (let i = 0; i < notCount; i++) {
-            const index = temp.lastIndexOf('NOT');
-            const value = temp[index + 1];
-            if(!(value instanceof Evaluateable)) {
-                throw new Error('Invalid boolean string');
-            }
-            temp.splice(index, 2, new Not(value));
-        }
-
-        const andCount = temp.filter(word => word === 'AND').length;
-        for(let i = 0; i < andCount; i++) {
-            const index = temp.indexOf('AND');
-            const left = temp[index - 1];
-            const right = temp[index + 1];
-            if(!(left instanceof Evaluateable && right instanceof Evaluateable)) {
-                throw new Error('Invalid boolean string');
-            }
-            temp.splice(index - 1, 3, new And(left, right));
-        }
-
-        const orCount = temp.filter(word => word === 'OR').length;
-        for (let i = 0; i < orCount; i++) {
-            const index = temp.indexOf('OR');
-
-            const left = temp[index - 1];
-            const right = temp[index + 1];
-            if(!(left instanceof Evaluateable && right instanceof Evaluateable)) {
-                throw new Error('Invalid boolean string');
-            }
-
-            temp.splice(index - 1, 3, new Or(left, right));
-        }
+        temp = this.ParseOperator(temp, Not);
+        temp = this.ParseOperator(temp, And);
+        temp = this.ParseOperator(temp, Or);
 
         if(temp.length !== 1 || !(temp[0] instanceof Evaluateable)) {
             throw new Error('Invalid boolean string');

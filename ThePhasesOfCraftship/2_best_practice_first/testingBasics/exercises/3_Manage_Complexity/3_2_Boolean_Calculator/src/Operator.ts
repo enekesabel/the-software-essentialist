@@ -4,7 +4,7 @@ export abstract class Operator extends Evaluateable {
     abstract evaluate(): boolean;
 }
 
-abstract class UnaryOperator extends Operator {
+export abstract class UnaryOperator extends Operator {
     readonly value: Evaluateable;
     constructor(value: Evaluateable) {
         super();
@@ -16,7 +16,7 @@ abstract class UnaryOperator extends Operator {
     }
 }
 
-abstract class BinaryOperator extends Operator {
+export abstract class BinaryOperator extends Operator {
     readonly left: Evaluateable;
     readonly right: Evaluateable;
     constructor(left: Evaluateable, right: Evaluateable) {
