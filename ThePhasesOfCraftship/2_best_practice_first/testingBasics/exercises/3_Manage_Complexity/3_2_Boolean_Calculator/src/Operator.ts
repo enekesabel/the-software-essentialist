@@ -16,7 +16,7 @@ export abstract class UnaryOperator extends Operator {
     }
 }
 
-export abstract class BinaryOperator extends Operator {
+abstract class BinaryOperator extends Operator {
     readonly left: Evaluateable;
     readonly right: Evaluateable;
     constructor(left: Evaluateable, right: Evaluateable) {

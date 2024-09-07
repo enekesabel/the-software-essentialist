@@ -1,7 +1,7 @@
 import { Evaluateable } from "./Evaluateable";
-import { And, BinaryOperator, Not, Operator, Or, UnaryOperator } from "./Operator";
+import { And, Not, Operator, Or, UnaryOperator } from "./Operator";
 import { splitByParentheses } from "./splitByParentheses";
-import { FALSE, TRUE, Value } from "./Value";
+import { FALSE, TRUE } from "./Value";
 
 const validWords = ['TRUE', 'FALSE', 'NOT', 'AND', 'OR'];
 

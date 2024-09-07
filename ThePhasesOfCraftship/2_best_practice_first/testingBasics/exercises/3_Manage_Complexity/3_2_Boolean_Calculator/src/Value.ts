@@ -1,6 +1,6 @@
 import { Evaluateable } from "./Evaluateable";
 
-export class Value extends Evaluateable {
+class Value extends Evaluateable {
     constructor(private value: boolean) {
         super()
     }
