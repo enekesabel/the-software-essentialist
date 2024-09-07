@@ -27,5 +27,9 @@ export const splitByParentheses = (str: string): string[] =>{
         }
     }
 
+    if(openCount !== 0) {
+        throw new Error('Invalid parentheses syntax.');
+    }
+
     return sections.map(r=>r.trim());
 }

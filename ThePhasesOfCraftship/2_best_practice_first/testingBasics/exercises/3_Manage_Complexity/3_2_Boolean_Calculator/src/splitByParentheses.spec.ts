@@ -20,4 +20,20 @@ describe('splitByParentheses', () => {
         expect(result).toEqual(expectedResult);
     });
 
+    describe(`It should throw an error if the string contains invalid parentheses syntax.`, ()=>{
+        it.each([
+            { str: "(TRUE", error: 'Invalid parentheses syntax.' },
+            { str: "((TRUE)", error: 'Invalid parentheses syntax.' },
+        ])('should throw an error if the string contains unclosed opening brackets: $str', ({ str, error }) => {
+            expect(() => splitByParentheses(str)).toThrowError(error);
+        });        
+    })
+
+    it.each([
+        { str: '(TRUE', error: 'Invalid parentheses syntax.' },
+        { str: 'TRUE(', error: 'Invalid parentheses syntax.' },
+    ])('should throw an error if the string contains parentheses in invalid order: $str', ({ str, error }) => {
+        expect(() => splitByParentheses(str)).toThrowError(error);
+    });
+
 })
