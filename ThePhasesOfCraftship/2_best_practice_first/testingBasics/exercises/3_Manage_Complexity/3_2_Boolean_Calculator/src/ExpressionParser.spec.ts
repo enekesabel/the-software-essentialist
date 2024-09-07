@@ -75,6 +75,16 @@ describe('ExpressionParser', () => {
         { booleanStr: 'TRUE AND OR TRUE', expectedError: 'Invalid boolean string' },
         { booleanStr: 'NOT AND TRUE', expectedError: 'Invalid boolean string' },
         { booleanStr: 'NOT OR TRUE', expectedError: 'Invalid boolean string' },
+        { booleanStr: '()', expectedError: 'Invalid boolean string' },
+        { booleanStr: '()TRUE', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'TRUE()', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'TRUE (OR) TRUE', expectedError: 'Invalid boolean string' },
+        { booleanStr: '(TRUE OR) TRUE', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'TRUE (OR TRUE)', expectedError: 'Invalid boolean string' },
+        { booleanStr: '(NOT TRU)E', expectedError: 'Invalid boolean string' },
+        { booleanStr: '(NOT) TRUE', expectedError: 'Invalid boolean string' },
+        { booleanStr: '(NOT TRUE OR) TRUE', expectedError: 'Invalid boolean string' },
+        { booleanStr: 'NOT TRUE (OR TRUE)', expectedError: 'Invalid boolean string' },
     ])('Should throw an error for an invalid boolean string "$booleanStr"', ({ booleanStr, expectedError }) => {
         // act & assert
         expect(() => ExpressionParser.Parse(booleanStr)).toThrowError(expectedError);
