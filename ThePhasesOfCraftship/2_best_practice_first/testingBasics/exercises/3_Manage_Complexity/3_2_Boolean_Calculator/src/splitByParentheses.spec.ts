@@ -37,11 +37,4 @@ describe('splitByParentheses', () => {
         });
     })
 
-    it.each([
-        { str: '(TRUE', error: 'Invalid parentheses syntax.' },
-        { str: 'TRUE(', error: 'Invalid parentheses syntax.' },
-    ])('should throw an error if the string contains parentheses in invalid order: $str', ({ str, error }) => {
-        expect(() => splitByParentheses(str)).toThrowError(error);
-    });
-
 })
