@@ -32,16 +32,17 @@ describe('ExpressionParser', () => {
         expect(expression).toMatchObject(expected);
     });
 
-    it('Should correctly parse expression with parentheses', () => {
-        // arrange
-        const booleanStr = '(TRUE)';
-
+    it.each([
+        { booleanStr: '(TRUE)', expected: TRUE },
+        { booleanStr: '(TRUE OR TRUE OR TRUE) AND FALSE', expected: new And(new Or(new Or(TRUE, TRUE), TRUE), FALSE) },
+        { booleanStr: 'NOT (TRUE AND TRUE)', expected: new Not(new And(TRUE, TRUE)) },
+    ])('Should correctly parse "$booleanStr"', ({ booleanStr, expected }) => {
         // act
         const expression = ExpressionParser.Parse(booleanStr);
 
         // assert
-        expect(expression.toString()).toEqual(TRUE.toString());
-        expect(expression).toMatchObject(TRUE);
+        expect(expression.toString()).toEqual(expected.toString());
+        expect(expression).toMatchObject(expected);
     });
 
     it.each([

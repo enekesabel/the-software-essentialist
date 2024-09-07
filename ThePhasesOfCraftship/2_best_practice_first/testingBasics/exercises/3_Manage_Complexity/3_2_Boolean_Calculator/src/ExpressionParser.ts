@@ -7,10 +7,11 @@ const validWords = ['TRUE', 'FALSE', 'NOT', 'AND', 'OR'];
 
 export class ExpressionParser {
     static Parse(booleanString: string): Evaluateable {
-        const sections = splitByParentheses(booleanString).map((section, index, array) => {
+        const sections = splitByParentheses(booleanString).map((section, _, array) => {
+            // if original string started with parenthesis,
             // odd sections were wrapped in parentheses, even sections were not
-            if(array.length > 1 && index % 2 === 0) {
-                return this.Parse(section);
+            if(section[0] === '(') {
+                return this.Parse(section.substring(1, section.length - 1));
             }
             
             const words = section.split(' ')
@@ -19,7 +20,7 @@ export class ExpressionParser {
             }
             return words;
         }).flat();
-    
+        
         return this.ParseWithoutParenthesis(sections);
     }
     private static ParseWithoutParenthesis(expression: (string | Evaluateable)[]): Evaluateable {

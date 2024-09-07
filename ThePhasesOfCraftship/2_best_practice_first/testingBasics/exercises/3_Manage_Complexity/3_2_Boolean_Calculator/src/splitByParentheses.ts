@@ -10,17 +10,19 @@ export const splitByParentheses = (str: string): string[] =>{
         const startNewSection = () => sections.push('');
 
         if(char === '(') {
-            openCount === 0 ? startNewSection() : appendToLastSection();
+            openCount === 0 ? startNewSection() : null;
             openCount++;
+            appendToLastSection();
         } else if (char === ')') {
+            appendToLastSection();
             openCount--;
             if(openCount === 0 && i !== str.length - 1) {
                 startNewSection();
             } 
-            if(openCount !== 0) {
-                appendToLastSection();
-            }
         } else {
+            if(sections.length === 0) {
+                startNewSection();
+            }
             appendToLastSection();
         }
     }
