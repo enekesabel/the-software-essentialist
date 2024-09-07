@@ -36,7 +36,22 @@ describe('ExpressionParser', () => {
         { booleanStr: '(TRUE)', expected: TRUE },
         { booleanStr: '(TRUE OR TRUE OR TRUE) AND FALSE', expected: new And(new Or(new Or(TRUE, TRUE), TRUE), FALSE) },
         { booleanStr: 'NOT (TRUE AND TRUE)', expected: new Not(new And(TRUE, TRUE)) },
-    ])('Should correctly parse "$booleanStr"', ({ booleanStr, expected }) => {
+    ])('Should correctly parse string with prentheses "$booleanStr"', ({ booleanStr, expected }) => {
+        // act
+        const expression = ExpressionParser.Parse(booleanStr);
+
+        // assert
+        expect(expression.toString()).toEqual(expected.toString());
+        expect(expression).toMatchObject(expected);
+    });
+
+    
+    it.each([
+        { booleanStr: '(TRUE OR (TRUE OR (TRUE OR TRUE)))', expected: new Or(TRUE, new Or(TRUE, new Or(TRUE, TRUE))) },
+        { booleanStr: 'NOT (TRUE OR (TRUE OR (TRUE)))', expected: new Not(new Or(TRUE, new Or(TRUE, TRUE))) },
+        { booleanStr: '(TRUE OR (TRUE OR (TRUE OR (TRUE)))) AND FALSE', expected: new And(new Or(TRUE, new Or(TRUE, new Or(TRUE, TRUE))), FALSE) },
+        { booleanStr: '(TRUE OR (TRUE OR (TRUE OR (TRUE OR TRUE)))) AND FALSE', expected: new And(new Or(TRUE, new Or(TRUE, new Or(TRUE, new Or(TRUE, TRUE)))), FALSE) },
+    ])('Should correctly parse string with nested parentheses "$booleanStr"', ({ booleanStr, expected }) => {
         // act
         const expression = ExpressionParser.Parse(booleanStr);
 
