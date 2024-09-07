@@ -12,6 +12,10 @@ describe('boolean calculator', () => {
         { booleanStr: 'FALSE OR FALSE', expected: false },
         { booleanStr: 'TRUE OR TRUE OR TRUE AND FALSE', expected: true },
         { booleanStr: 'TRUE OR FALSE AND NOT FALSE', expected: true },
+        { booleanStr: '(TRUE OR TRUE OR TRUE) AND FALSE', expected: false },
+        { booleanStr: 'NOT (TRUE AND TRUE)', expected: false },
+        { booleanStr: 'NOT (TRUE OR (TRUE OR (TRUE)))', expected: false },
+        { booleanStr: '(TRUE OR (TRUE OR (TRUE OR TRUE)))', expected: true },
     ])('Should correctly parse "$booleanStr"', ({ booleanStr, expected }) => {
         // act
         const result = BooleanCalculator.Evaluate(booleanStr);
