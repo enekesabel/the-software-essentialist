@@ -26,7 +26,15 @@ describe('splitByParentheses', () => {
             { str: "((TRUE)", error: 'Invalid parentheses syntax.' },
         ])('should throw an error if the string contains unclosed opening brackets: $str', ({ str, error }) => {
             expect(() => splitByParentheses(str)).toThrowError(error);
-        });        
+        });
+        
+        it.each([
+            { str: "TRUE)", error: 'Invalid parentheses syntax.' },
+            { str: "(TRUE) OR TRUE)", error: 'Invalid parentheses syntax.' },
+            { str: "TRUE) AND (TRUE)", error: 'Invalid parentheses syntax.' },
+        ])('should throw an error if the string contains unclosed closing brackets: $str', ({ str, error }) => {
+            expect(() => splitByParentheses(str)).toThrowError(error);
+        });
     })
 
     it.each([

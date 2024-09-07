@@ -1,7 +1,8 @@
+const throwInvalidParenthesesSyntaxError = () => {
+    throw new Error('Invalid parentheses syntax.');
+}
+
 export const splitByParentheses = (str: string): string[] =>{
-    if(!str.includes('(')) {
-        return [str];
-    }
     const sections: string[] = [];
     let openCount = 0;
     for (let i = 0; i < str.length; i++) {
@@ -14,6 +15,9 @@ export const splitByParentheses = (str: string): string[] =>{
             openCount++;
             appendToLastSection();
         } else if (char === ')') {
+            if(openCount === 0) {
+                throwInvalidParenthesesSyntaxError();
+            }
             appendToLastSection();
             openCount--;
             if(openCount === 0 && i !== str.length - 1) {
@@ -28,7 +32,7 @@ export const splitByParentheses = (str: string): string[] =>{
     }
 
     if(openCount !== 0) {
-        throw new Error('Invalid parentheses syntax.');
+        throwInvalidParenthesesSyntaxError();
     }
 
     return sections.map(r=>r.trim());
