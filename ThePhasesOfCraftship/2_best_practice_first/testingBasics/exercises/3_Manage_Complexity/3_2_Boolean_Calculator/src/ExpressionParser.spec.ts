@@ -79,4 +79,17 @@ describe('ExpressionParser', () => {
         // act & assert
         expect(() => ExpressionParser.Parse(booleanStr)).toThrowError(expectedError);
     });
+
+    
+    it.each([
+        { booleanStr: '(TRUE', expectedError: 'Invalid parentheses syntax.' },
+        { booleanStr: ')TRUE', expectedError: 'Invalid parentheses syntax.' },
+        { booleanStr: 'TRUE(', expectedError: 'Invalid parentheses syntax.' },
+        { booleanStr: '((TRUE)', expectedError: 'Invalid parentheses syntax.' },
+        { booleanStr: '(TRUE))', expectedError: 'Invalid parentheses syntax.' },
+        { booleanStr: ')TRUE(', expectedError: 'Invalid parentheses syntax.' },
+    ])('Should throw an error for an invalid parentheses syntax "$booleanStr"', ({ booleanStr, expectedError }) => {
+        // act & assert
+        expect(() => ExpressionParser.Parse(booleanStr)).toThrowError(expectedError);
+    });
 });
