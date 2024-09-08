@@ -6,7 +6,7 @@ class Value extends Evaluateable {
     }
 
     toString(): string {
-        return String(this.value);
+        return this.value ? 'TRUE' : 'FALSE';
     }
     evaluate(): boolean {
         return this.value;

@@ -22,7 +22,8 @@ export abstract class UnaryOperator extends Operator {
     }
 
     toString(): string {
-        return `${this.constructor.name} ${this.value.toString()}`;
+        const stringifiedValue = this.value instanceof BinaryOperator? `(${this.value.toString()})` : this.value.toString();
+        return `${this.name} ${stringifiedValue}`;
     }
     protected parse(expression: PartiallyParsedExpression): PartiallyParsedExpression {
         const temp = [...expression];
@@ -51,7 +52,11 @@ abstract class BinaryOperator extends Operator {
     }
 
     toString(): string {
-        return `${this.left.toString()} ${this.constructor.name} ${this.right.toString()}`;
+
+        const stringifiedLeft = this.left instanceof BinaryOperator? `(${this.left.toString()})` : this.left.toString();
+        const stringifiedRight = this.right instanceof BinaryOperator? `(${this.right.toString()})` : this.right.toString();
+
+        return `${stringifiedLeft} ${this.name} ${stringifiedRight}`;
     }
 
     protected parse(expression: PartiallyParsedExpression): PartiallyParsedExpression {
