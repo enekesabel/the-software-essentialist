@@ -20,26 +20,26 @@ const ResolutionTable = {
 export class BooleanCalculator {
 
     private static ResolveExpressions(booleanStr: string): string {
-        booleanStr = booleanStr.slice();
         
         // matches all groups of parentheses that doesn't have nested parentheses
+        // ex. from ((TRUE) OR (TRUE OR (TRUE OR TRUE))) would match: ['(TRUE)', '(TRUE OR TRUE)']
         const regExp = /\([^()]*\)/g;
         let matches = booleanStr.match(regExp);
-
         while(matches) {
            matches.forEach(match => {
-               booleanStr = booleanStr.replace(match, this.ResolveExpressions(match.slice(1, -1)));
+               const matchWithoutParentheses = match.slice(1, -1);
+               booleanStr = booleanStr.replace(match, this.ResolveExpressions(matchWithoutParentheses));
            })
            matches = booleanStr.match(regExp);
         }
         
-        Object.entries(ResolutionTable).forEach(([type, resolutions]) => {
+        Object.entries(ResolutionTable).forEach(([operator, resolutions]) => {
             let prevLength = 0;
-            while (booleanStr.includes(type) && prevLength !== booleanStr.length) {
+            while (booleanStr.includes(operator) && prevLength !== booleanStr.length) {
                 prevLength = booleanStr.length;
-                Object.entries(resolutions).forEach(([key, value]) => {
-                    while(booleanStr.includes(key)) {
-                        booleanStr = booleanStr.replace(key, value);
+                Object.entries(resolutions).forEach(([expression, value]) => {
+                    while(booleanStr.includes(expression)) {
+                        booleanStr = booleanStr.replace(expression, value);
                     }
                 });
             }
@@ -49,12 +49,12 @@ export class BooleanCalculator {
 
     public static Evaluate(booleanStr: string): boolean {
 
-        booleanStr = this.ResolveExpressions(booleanStr);
+        const resolvedExpression = this.ResolveExpressions(booleanStr);
 
-        if(booleanStr === 'TRUE') {
+        if(resolvedExpression === 'TRUE') {
             return true;
         } 
-        if(booleanStr === 'FALSE') {
+        if(resolvedExpression === 'FALSE') {
             return false;
         }
     
