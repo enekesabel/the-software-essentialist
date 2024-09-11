@@ -19,20 +19,7 @@ const ResolutionTable = {
 
 export class BooleanCalculator {
 
-    private static ResolveExpressions(booleanStr: string): string {
-        
-        // matches all groups of parentheses that doesn't have nested parentheses
-        // ex. from ((TRUE) OR (TRUE OR (TRUE OR TRUE))) would match: ['(TRUE)', '(TRUE OR TRUE)']
-        const regExp = /\([^()]*\)/g;
-        let matches = booleanStr.match(regExp);
-        while(matches) {
-           matches.forEach(match => {
-               const matchWithoutParentheses = match.slice(1, -1);
-               booleanStr = booleanStr.replace(match, this.ResolveExpressions(matchWithoutParentheses));
-           })
-           matches = booleanStr.match(regExp);
-        }
-        
+    private static ResolveExpressionsWithoutParentheses(booleanStr: string): string {
         Object.entries(ResolutionTable).forEach(([operator, resolutions]) => {
             let prevLength = 0;
             while (booleanStr.includes(operator) && prevLength !== booleanStr.length) {
@@ -45,6 +32,25 @@ export class BooleanCalculator {
             }
         });
         return booleanStr;
+    }
+
+    private static ResolveExpressions(booleanStr: string): string {
+        
+        // matches all groups of parentheses that doesn't have nested parentheses
+        // ex. from ((TRUE) OR (TRUE OR (TRUE OR TRUE))) would match: ['(TRUE)', '(TRUE OR TRUE)']
+        const regExp = /\([^()]*\)/g;
+        let matches = booleanStr.match(regExp);
+
+        // resolve expressions in parentheses from inside-out, till no parentheses left
+        while(matches) {
+           matches.forEach(match => {
+               const matchWithoutParentheses = match.slice(1, -1);
+               booleanStr = booleanStr.replace(match, this.ResolveExpressionsWithoutParentheses(matchWithoutParentheses));
+           })
+           matches = booleanStr.match(regExp);
+        }
+        
+        return this.ResolveExpressionsWithoutParentheses(booleanStr);
     }
 
     public static Evaluate(booleanStr: string): boolean {
