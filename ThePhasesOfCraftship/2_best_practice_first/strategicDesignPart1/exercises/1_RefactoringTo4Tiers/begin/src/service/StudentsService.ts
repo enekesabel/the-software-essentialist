@@ -61,4 +61,30 @@ export class StudentsService {
             },
         });
     }
+
+    async getStudentGrades(id: string) {
+        // check if student exists
+        const student = await prisma.student.findUnique({
+            where: {
+                id
+            }
+        });
+
+        if (!student) {
+            throw new StudentNotFoundError();
+        }
+
+        return await prisma.studentAssignment.findMany({
+            where: {
+                studentId: id,
+                status: 'submitted',
+                grade: {
+                    not: null
+                }
+            },
+            include: {
+                assignment: true
+            },
+        });
+    }
 }

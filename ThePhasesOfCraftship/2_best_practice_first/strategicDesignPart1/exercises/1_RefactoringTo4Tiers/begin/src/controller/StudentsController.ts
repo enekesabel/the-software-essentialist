@@ -74,7 +74,7 @@ export class StudentsController extends BaseController {
         
             res.status(200).json({ error: undefined, data: parseForResponse(studentAssignments), success: true });
         } catch (error) {
-            
+
             if(error instanceof StudentNotFoundError) {
                 return res.status(404).json({ error: error.message, data: undefined, success: false });
             }
@@ -90,32 +90,13 @@ export class StudentsController extends BaseController {
                 return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
             }
     
-            // check if student exists
-            const student = await prisma.student.findUnique({
-                where: {
-                    id
-                }
-            });
-    
-            if (!student) {
-                return res.status(404).json({ error: new StudentNotFoundError().message, data: undefined, success: false });
-            }
-    
-            const studentAssignments = await prisma.studentAssignment.findMany({
-                where: {
-                    studentId: id,
-                    status: 'submitted',
-                    grade: {
-                        not: null
-                    }
-                },
-                include: {
-                    assignment: true
-                },
-            });
+            const studentAssignments = this.studentsService.getStudentGrades(id);
         
             res.status(200).json({ error: undefined, data: parseForResponse(studentAssignments), success: true });
         } catch (error) {
+            if(error instanceof StudentNotFoundError) {
+                return res.status(404).json({ error: error.message, data: undefined, success: false });
+            }
             res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
         }
     }
