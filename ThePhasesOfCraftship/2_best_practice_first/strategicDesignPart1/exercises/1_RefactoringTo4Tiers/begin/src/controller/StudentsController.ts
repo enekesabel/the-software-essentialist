@@ -13,14 +13,14 @@ export class StudentsController extends BaseController {
     }
    
     protected setUpRoutes(): void {
-        this.router.post('/', this.create);
-        this.router.get('/', this.getAll);
-        this.router.get('/:id', this.getById);
-        this.router.get('/:id/assignments', this.getAssignments);
-        this.router.get('/:id/grades', this.getGrades);
+        this.router.post('/', this.createStudent);
+        this.router.get('/', this.getAllStudents);
+        this.router.get('/:id', this.getStudentById);
+        this.router.get('/:id/assignments', this.getStudentAssignments);
+        this.router.get('/:id/grades', this.getStudentGrades);
     }
 
-    async create (req: Request, res: Response) {
+    async createStudent (req: Request, res: Response) {
         try {
             const createStudentDTO = CreateStudentDTO.Create(req.body);
             if (isInvalidDTO(createStudentDTO)) {
@@ -35,7 +35,7 @@ export class StudentsController extends BaseController {
         }
     }
 
-    async getAll (req: Request, res: Response) {
+    async getAllStudents (req: Request, res: Response) {
         try {
             const students = this.studentsService.getAllStudents();
             res.status(200).json({ error: undefined, data: parseForResponse(students), success: true });
@@ -44,7 +44,7 @@ export class StudentsController extends BaseController {
         }
     }
 
-    async getById(req: Request, res: Response) {
+    async getStudentById(req: Request, res: Response) {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
@@ -63,7 +63,7 @@ export class StudentsController extends BaseController {
         }
     }
 
-    async getAssignments(req: Request, res: Response) {
+    async getStudentAssignments(req: Request, res: Response) {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
@@ -83,7 +83,7 @@ export class StudentsController extends BaseController {
         }
     }
 
-    async getGrades(req: Request, res: Response) {
+    async getStudentGrades(req: Request, res: Response) {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
