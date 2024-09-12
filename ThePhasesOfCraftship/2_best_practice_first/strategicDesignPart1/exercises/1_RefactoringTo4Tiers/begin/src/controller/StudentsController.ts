@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { prisma } from "../database";
 import { isUUID, parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateStudentDTO, isInvalidDTO } from "../dto";
