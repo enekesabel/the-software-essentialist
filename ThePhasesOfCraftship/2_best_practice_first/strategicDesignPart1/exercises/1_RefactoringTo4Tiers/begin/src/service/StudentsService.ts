@@ -1,5 +1,6 @@
 import { prisma } from "../database";
 import { CreateStudentDTO } from "../dto";
+import { StudentNotFoundError } from "../Errors";
 
 export class StudentsService {
     async createStudent(createStudentDTO: CreateStudentDTO) {
@@ -35,6 +36,29 @@ export class StudentsService {
                 assignments: true,
                 reportCards: true
             }
+        });
+    }
+
+    async getStudentAssignments(id: string) {
+        // check if student exists
+        const student = await prisma.student.findUnique({
+            where: {
+                id
+            }
+        });
+
+        if (!student) {
+            throw new StudentNotFoundError();
+        }
+
+        return await prisma.studentAssignment.findMany({
+            where: {
+                studentId: id,
+                status: 'submitted'
+            },
+            include: {
+                assignment: true
+            },
         });
     }
 }
