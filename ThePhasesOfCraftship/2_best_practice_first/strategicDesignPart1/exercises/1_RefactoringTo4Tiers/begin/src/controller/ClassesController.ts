@@ -7,11 +7,11 @@ import { BaseController } from "./BaseController";
 export class ClassesController extends BaseController {
 
     protected setUpRoutes(): void {
-        this.router.post('/', this.createClass);
+        this.router.post('/', this.create);
         this.router.get('/:id/assignments', this.getAssignments);
     }
 
-    async createClass(req: Request, res: Response) {
+    async create(req: Request, res: Response) {
         try {
             if (isMissingKeys(req.body, ['name'])) {
                 return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
