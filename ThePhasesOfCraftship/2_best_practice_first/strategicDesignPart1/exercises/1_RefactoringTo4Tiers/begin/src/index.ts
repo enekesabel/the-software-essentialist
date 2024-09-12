@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { prisma } from './database';
 import { Errors } from './controller/Errors';
 import { isMissingKeys, parseForResponse, isUUID } from './controller/utils';
-import { StudentsController, ClassesController, StudentAssignmentsController } from './controller';
+import { StudentsController, ClassesController, StudentAssignmentsController, AssignmentsController } from './controller';
 const cors = require('cors');
 const app = express();
 app.use(express.json());
@@ -18,6 +18,9 @@ app.use('/classes', classesController.router);
 
 const studentAssignmentsController = new StudentAssignmentsController();
 app.use('/student-assignments', studentAssignmentsController.router);
+
+const assignmentsController = new AssignmentsController();
+app.use('/assignments', assignmentsController.router);
 
 // POST student assigned to class
 app.post('/class-enrollments', async (req: Request, res: Response) => {
@@ -74,55 +77,6 @@ app.post('/class-enrollments', async (req: Request, res: Response) => {
         res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
     }
  
-});
-
-// POST assignment created
-app.post('/assignments', async (req: Request, res: Response) => {
-    try {
-        if (isMissingKeys(req.body, ['classId', 'title'])) {
-            return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
-        }
-    
-        const { classId, title } = req.body;
-    
-        const assignment = await prisma.assignment.create({
-            data: {
-                classId,
-                title
-            }
-        });
-    
-        res.status(201).json({ error: undefined, data: parseForResponse(assignment), success: true });
-    } catch (error) {
-        res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
-    }
-});
-
-// GET assignment by id
-app.get('/assignments/:id', async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params;
-        if(!isUUID(id)) {
-            return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
-        }
-        const assignment = await prisma.assignment.findUnique({
-            include: {
-                class: true,
-                studentTasks: true
-            },
-            where: {
-                id
-            }
-        });
-    
-        if (!assignment) {
-            return res.status(404).json({ error: Errors.AssignmentNotFound, data: undefined, success: false });
-        }
-    
-        res.status(200).json({ error: undefined, data: parseForResponse(assignment), success: true });
-    } catch (error) {
-        res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
-    }
 });
 
 const port = process.env.PORT || 3000;
