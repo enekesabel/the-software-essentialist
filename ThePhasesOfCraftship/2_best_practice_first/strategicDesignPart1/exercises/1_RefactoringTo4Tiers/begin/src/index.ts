@@ -1,5 +1,6 @@
 import express from 'express';
 import { StudentsController, ClassesController, StudentAssignmentsController, AssignmentsController, ClassEnrollmentsController } from './controller';
+import { StudentsService } from './service';
 
 const cors = require('cors');
 const app = express();
@@ -8,7 +9,8 @@ app.use(cors());
 
 // API Endpoints
 
-const studentsController = new StudentsController();
+const studentsService = new StudentsService();
+const studentsController = new StudentsController(studentsService);
 app.use('/students', studentsController.router);
 
 const classesController = new ClassesController();

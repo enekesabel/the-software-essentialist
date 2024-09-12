@@ -4,8 +4,13 @@ import { Errors } from "./Errors";
 import { isUUID, parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateStudentDTO, isInvalidDTO } from "../dto";
+import { StudentsService } from "../service";
 
 export class StudentsController extends BaseController {
+
+    constructor(private studentsService: StudentsService) {
+        super();
+    }
    
     protected setUpRoutes(): void {
         this.router.post('/', this.create);
@@ -22,14 +27,8 @@ export class StudentsController extends BaseController {
                 return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
             }
     
-            const { name } = createStudentDTO;
-    
-            const student = await prisma.student.create({
-                data: {
-                    name
-                }
-            });
-    
+            const student = await this.studentsService.createStudent(createStudentDTO);
+
             res.status(201).json({ error: undefined, data: parseForResponse(student), success: true });
         } catch (error) {
             res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
@@ -38,16 +37,7 @@ export class StudentsController extends BaseController {
 
     async getAll (req: Request, res: Response) {
         try {
-            const students = await prisma.student.findMany({
-                include: {
-                    classes: true,
-                    assignments: true,
-                    reportCards: true
-                }, 
-                orderBy: {
-                    name: 'asc'
-                }
-            });
+            const students = this.studentsService.getAllStudents();
             res.status(200).json({ error: undefined, data: parseForResponse(students), success: true });
         } catch (error) {
             res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
@@ -60,16 +50,8 @@ export class StudentsController extends BaseController {
             if(!isUUID(id)) {
                 return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
             }
-            const student = await prisma.student.findUnique({
-                where: {
-                    id
-                },
-                include: {
-                    classes: true,
-                    assignments: true,
-                    reportCards: true
-                }
-            });
+
+            const student = this.studentsService.getStudentById(id);
         
             if (!student) {
                 return res.status(404).json({ error: Errors.StudentNotFound, data: undefined, success: false });
