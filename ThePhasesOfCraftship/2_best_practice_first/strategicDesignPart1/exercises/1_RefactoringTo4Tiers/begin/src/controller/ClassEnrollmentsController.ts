@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { prisma } from "../database";
 import { Errors } from "./Errors";
-import { isMissingKeys, parseForResponse } from "./utils";
+import { parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
+import { EnrollStudentToClassDTO, isInvalidDTO } from "../dto";
 
 export class ClassEnrollmentsController extends BaseController {
 
@@ -12,16 +13,15 @@ export class ClassEnrollmentsController extends BaseController {
 
     async enrollStudentToClass(req: Request, res: Response) {
         try {
-            if (isMissingKeys(req.body, ['studentId', 'classId'])) {
+            const enrollStudentToClassDTO = EnrollStudentToClassDTO.Create(req.body);
+            if (isInvalidDTO(enrollStudentToClassDTO)) {
                 return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
             }
-        
-            const { studentId, classId } = req.body;
         
             // check if student exists
             const student = await prisma.student.findUnique({
                 where: {
-                    id: studentId
+                    id: enrollStudentToClassDTO.studentId
                 }
             });
         
@@ -32,16 +32,13 @@ export class ClassEnrollmentsController extends BaseController {
             // check if class exists
             const cls = await prisma.class.findUnique({
                 where: {
-                    id: classId
+                    id: enrollStudentToClassDTO.classId
                 }
             });
     
             // check if student is already enrolled in class
             const duplicatedClassEnrollment = await prisma.classEnrollment.findFirst({
-                where: {
-                    studentId,
-                    classId
-                }
+                where: enrollStudentToClassDTO
             });
     
             if (duplicatedClassEnrollment) {
@@ -53,10 +50,7 @@ export class ClassEnrollmentsController extends BaseController {
             }
         
             const classEnrollment = await prisma.classEnrollment.create({
-                data: {
-                    studentId,
-                    classId
-                }
+                data: enrollStudentToClassDTO
             });
         
             res.status(201).json({ error: undefined, data: parseForResponse(classEnrollment), success: true });
