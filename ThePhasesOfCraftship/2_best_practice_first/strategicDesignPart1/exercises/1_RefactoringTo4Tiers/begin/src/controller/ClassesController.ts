@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import { prisma } from "../database";
 import { Errors } from "./Errors";
-import { isMissingKeys, isUUID, parseForResponse } from "./utils";
+import { isUUID, parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
+import { CreateClassDTO, isInvalidDTO } from "../dto";
 
 export class ClassesController extends BaseController {
 
@@ -13,16 +14,13 @@ export class ClassesController extends BaseController {
 
     async create(req: Request, res: Response) {
         try {
-            if (isMissingKeys(req.body, ['name'])) {
+            const classDTO = CreateClassDTO.Create(req.body.name);
+            if (isInvalidDTO(classDTO)) {
                 return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
             }
         
-            const { name } = req.body;
-        
             const cls = await prisma.class.create({
-                data: {
-                    name
-                }
+                data: classDTO
             });
         
             res.status(201).json({ error: undefined, data: parseForResponse(cls), success: true });
