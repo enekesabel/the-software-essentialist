@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { prisma } from "../database";
-import { Errors } from "./Errors";
 import { isUUID, parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateAssignmentDTO, isInvalidDTO } from "../dto";
+import { ValidationError, ServerError, AssignmentNotFoundError } from "../Errors";
 
 export class AssignmentsController extends BaseController {
 
@@ -16,7 +16,7 @@ export class AssignmentsController extends BaseController {
         try {
             const createAssignmentDTO = CreateAssignmentDTO.Create(req.body);
             if (isInvalidDTO(createAssignmentDTO)) {
-                return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
+                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
             }
         
             const assignment = await prisma.assignment.create({
@@ -25,7 +25,7 @@ export class AssignmentsController extends BaseController {
         
             res.status(201).json({ error: undefined, data: parseForResponse(assignment), success: true });
         } catch (error) {
-            res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
+            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
         }
     }
 
@@ -33,7 +33,7 @@ export class AssignmentsController extends BaseController {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
-                return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
+                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
             }
             const assignment = await prisma.assignment.findUnique({
                 include: {
@@ -46,13 +46,14 @@ export class AssignmentsController extends BaseController {
             });
         
             if (!assignment) {
-                return res.status(404).json({ error: Errors.AssignmentNotFound, data: undefined, success: false });
+                return res.status(404).json({ error: new AssignmentNotFoundError().message, data: undefined, success: false });
             }
         
             res.status(200).json({ error: undefined, data: parseForResponse(assignment), success: true });
         } catch (error) {
-            res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
+            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
         }
     }
 
 }
+

@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { prisma } from "../database";
-import { Errors } from "./Errors";
 import { isUUID, parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateStudentDTO, isInvalidDTO } from "../dto";
 import { StudentsService } from "../service";
+import { ValidationError, ServerError, StudentNotFoundError } from "../Errors";
 
 export class StudentsController extends BaseController {
 
@@ -24,14 +24,14 @@ export class StudentsController extends BaseController {
         try {
             const createStudentDTO = CreateStudentDTO.Create(req.body);
             if (isInvalidDTO(createStudentDTO)) {
-                return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
+                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
             }
     
             const student = await this.studentsService.createStudent(createStudentDTO);
 
             res.status(201).json({ error: undefined, data: parseForResponse(student), success: true });
         } catch (error) {
-            res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
+            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
         }
     }
 
@@ -40,7 +40,7 @@ export class StudentsController extends BaseController {
             const students = this.studentsService.getAllStudents();
             res.status(200).json({ error: undefined, data: parseForResponse(students), success: true });
         } catch (error) {
-            res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
+            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
         }
     }
 
@@ -48,18 +48,18 @@ export class StudentsController extends BaseController {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
-                return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
+                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
             }
 
             const student = this.studentsService.getStudentById(id);
         
             if (!student) {
-                return res.status(404).json({ error: Errors.StudentNotFound, data: undefined, success: false });
+                return res.status(404).json({ error: new StudentNotFoundError().message, data: undefined, success: false });
             }
         
             res.status(200).json({ error: undefined, data: parseForResponse(student), success: true });
         } catch (error) {
-            res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
+            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
         }
     }
 
@@ -67,7 +67,7 @@ export class StudentsController extends BaseController {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
-                return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
+                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
             }
     
             // check if student exists
@@ -78,7 +78,7 @@ export class StudentsController extends BaseController {
             });
     
             if (!student) {
-                return res.status(404).json({ error: Errors.StudentNotFound, data: undefined, success: false });
+                return res.status(404).json({ error: new StudentNotFoundError().message, data: undefined, success: false });
             }
     
             const studentAssignments = await prisma.studentAssignment.findMany({
@@ -93,7 +93,7 @@ export class StudentsController extends BaseController {
         
             res.status(200).json({ error: undefined, data: parseForResponse(studentAssignments), success: true });
         } catch (error) {
-            res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
+            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
         }
     }
 
@@ -101,7 +101,7 @@ export class StudentsController extends BaseController {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
-                return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
+                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
             }
     
             // check if student exists
@@ -112,7 +112,7 @@ export class StudentsController extends BaseController {
             });
     
             if (!student) {
-                return res.status(404).json({ error: Errors.StudentNotFound, data: undefined, success: false });
+                return res.status(404).json({ error: new StudentNotFoundError().message, data: undefined, success: false });
             }
     
             const studentAssignments = await prisma.studentAssignment.findMany({
@@ -130,7 +130,7 @@ export class StudentsController extends BaseController {
         
             res.status(200).json({ error: undefined, data: parseForResponse(studentAssignments), success: true });
         } catch (error) {
-            res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
+            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
         }
     }
 }
