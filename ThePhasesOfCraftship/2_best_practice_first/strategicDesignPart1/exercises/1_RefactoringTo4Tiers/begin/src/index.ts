@@ -1,40 +1,21 @@
 import express, { Request, Response } from 'express';
 import { prisma } from './database';
-import { Student, Class, Assignment, StudentAssignment } from '@prisma/client';
-import { error } from 'console';
 import { Errors } from './controller/Errors';
 import { isMissingKeys, parseForResponse, isUUID } from './controller/utils';
 import { StudentsController } from './controller/StudentsController';
+import { ClassesController } from './controller/ClassesController';
 const cors = require('cors');
 const app = express();
 app.use(express.json());
 app.use(cors());
 
+// API Endpoints
+
 const studentsController = new StudentsController();
 app.use('/students', studentsController.router);
 
-// API Endpoints
-
-// POST class created
-app.post('/classes', async (req: Request, res: Response) => {
-    try {
-        if (isMissingKeys(req.body, ['name'])) {
-            return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
-        }
-    
-        const { name } = req.body;
-    
-        const cls = await prisma.class.create({
-            data: {
-                name
-            }
-        });
-    
-        res.status(201).json({ error: undefined, data: parseForResponse(cls), success: true });
-    } catch (error) {
-        res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
-    }
-});
+const classesController = new ClassesController();
+app.use('/classes', classesController.router);
 
 // POST student assigned to class
 app.post('/class-enrollments', async (req: Request, res: Response) => {
@@ -259,41 +240,6 @@ app.get('/assignments/:id', async (req: Request, res: Response) => {
         }
     
         res.status(200).json({ error: undefined, data: parseForResponse(assignment), success: true });
-    } catch (error) {
-        res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
-    }
-});
-
-// GET all assignments for class
-app.get('/classes/:id/assignments', async (req: Request, res: Response) => {
-    try {
-        const { id } = req.params;
-        if(!isUUID(id)) {
-            return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
-        }
-
-        // check if class exists
-        const cls = await prisma.class.findUnique({
-            where: {
-                id
-            }
-        });
-
-        if (!cls) {
-            return res.status(404).json({ error: Errors.ClassNotFound, data: undefined, success: false });
-        }
-
-        const assignments = await prisma.assignment.findMany({
-            where: {
-                classId: id
-            },
-            include: {
-                class: true,
-                studentTasks: true
-            }
-        });
-    
-        res.status(200).json({ error: undefined, data: parseForResponse(assignments), success: true });
     } catch (error) {
         res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
     }
