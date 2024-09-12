@@ -10,6 +10,7 @@ export class StudentsController {
     constructor() {
         this.router = Router();
         this.router.post('/', this.create);
+        this.router.get('/', this.getAll);
     }
 
     async create (req: Request, res: Response) {
@@ -27,6 +28,24 @@ export class StudentsController {
             });
     
             res.status(201).json({ error: undefined, data: parseForResponse(student), success: true });
+        } catch (error) {
+            res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
+        }
+    }
+
+    async getAll (req: Request, res: Response) {
+        try {
+            const students = await prisma.student.findMany({
+                include: {
+                    classes: true,
+                    assignments: true,
+                    reportCards: true
+                }, 
+                orderBy: {
+                    name: 'asc'
+                }
+            });
+            res.status(200).json({ error: undefined, data: parseForResponse(students), success: true });
         } catch (error) {
             res.status(500).json({ error: Errors.ServerError, data: undefined, success: false });
         }
