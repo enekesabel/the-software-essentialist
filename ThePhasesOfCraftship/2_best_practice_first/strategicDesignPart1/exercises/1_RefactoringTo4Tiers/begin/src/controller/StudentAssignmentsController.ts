@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { prisma } from "../database";
 import { Errors } from "./Errors";
-import { isMissingKeys, parseForResponse } from "./utils";
+import { parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
-import { CreateStudentAssignmentDTO, isInvalidDTO } from "../dto";
+import { CreateStudentAssignmentDTO, GradeStudentAssignmentDTO, isInvalidDTO } from "../dto";
 
 export class StudentAssignmentsController extends BaseController {
     protected setUpRoutes(): void {
@@ -95,18 +95,13 @@ export class StudentAssignmentsController extends BaseController {
    
     async grade(req: Request, res: Response) {
         try {
-
-            if (isMissingKeys(req.body, ['id', 'grade'])) {
-                return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
-            }
-        
-            const { id, grade } = req.body;
-        
-            // validate grade
-            if (!['A', 'B', 'C', 'D'].includes(grade)) {
+            const gradeStudentAssignmentDTO = GradeStudentAssignmentDTO.Create(req.body);
+            if (isInvalidDTO(gradeStudentAssignmentDTO)) {
                 return res.status(400).json({ error: Errors.ValidationError, data: undefined, success: false });
             }
             
+            const { id, grade } = gradeStudentAssignmentDTO;
+
             // check if student assignment exists
             const studentAssignment = await prisma.studentAssignment.findUnique({
                 where: {
