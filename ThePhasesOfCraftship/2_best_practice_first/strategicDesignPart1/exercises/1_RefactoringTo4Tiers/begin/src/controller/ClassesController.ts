@@ -1,13 +1,12 @@
-import { Router, Request, Response } from "express";
+import { Request, Response } from "express";
 import { prisma } from "../database";
 import { Errors } from "./Errors";
 import { isMissingKeys, isUUID, parseForResponse } from "./utils";
+import { BaseController } from "./BaseController";
 
-export class ClassesController {
-    public router: Router;
+export class ClassesController extends BaseController {
 
-    constructor() {
-        this.router = Router();
+    protected setUpRoutes(): void {
         this.router.post('/', this.createClass);
         this.router.get('/:id/assignments', this.getAssignments);
     }
