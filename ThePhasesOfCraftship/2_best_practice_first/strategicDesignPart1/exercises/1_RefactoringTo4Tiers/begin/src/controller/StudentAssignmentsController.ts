@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { prisma } from "../database";
 import { parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
@@ -12,11 +12,11 @@ export class StudentAssignmentsController extends BaseController {
         this.router.post('/grade', this.grade);
     }
     
-    async create(req: Request, res: Response) {
+    async create(req: Request, res: Response, next: NextFunction) {
         try {
             const createStudentAssignmentDTO = CreateStudentAssignmentDTO.Create(req.body);
             if (isInvalidDTO(createStudentAssignmentDTO)) {
-            return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
+                return next(new ValidationError());
             }
         
             const { studentId, assignmentId } = createStudentAssignmentDTO;
@@ -29,7 +29,7 @@ export class StudentAssignmentsController extends BaseController {
             });
         
             if (!student) {
-                return res.status(404).json({ error: new StudentNotFoundError().message, data: undefined, success: false });
+                return next(new StudentNotFoundError());
             }
         
             // check if assignment exists
@@ -40,7 +40,7 @@ export class StudentAssignmentsController extends BaseController {
             });
         
             if (!assignment) {
-                return res.status(404).json({ error: new AssignmentNotFoundError().message, data: undefined, success: false });
+                return next(new AssignmentNotFoundError());
             }
         
             const studentAssignment = await prisma.studentAssignment.create({
@@ -52,17 +52,17 @@ export class StudentAssignmentsController extends BaseController {
         
             res.status(201).json({ error: undefined, data: parseForResponse(studentAssignment), success: true });
         } catch (error) {
-            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+            next(error);
         }
     }
 
     
-    async submit(req: Request, res: Response) {
+    async submit(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.body;
 
             if (id === undefined) {
-                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
+                return next(new ValidationError());
             }
 
             
@@ -74,7 +74,7 @@ export class StudentAssignmentsController extends BaseController {
             });
 
             if (!studentAssignment) {
-                return res.status(404).json({ error: new AssignmentNotFoundError().message, data: undefined, success: false });
+                return next(new AssignmentNotFoundError());
             }
 
             const studentAssignmentUpdated = await prisma.studentAssignment.update({
@@ -88,16 +88,16 @@ export class StudentAssignmentsController extends BaseController {
 
             res.status(200).json({ error: undefined, data: parseForResponse(studentAssignmentUpdated), success: true });
         } catch (error) {
-            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+            next(error);
         }
     }
 
    
-    async grade(req: Request, res: Response) {
+    async grade(req: Request, res: Response, next: NextFunction) {
         try {
             const gradeStudentAssignmentDTO = GradeStudentAssignmentDTO.Create(req.body);
             if (isInvalidDTO(gradeStudentAssignmentDTO)) {
-                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
+                return next(new ValidationError());
             }
             
             const { id, grade } = gradeStudentAssignmentDTO;
@@ -110,7 +110,7 @@ export class StudentAssignmentsController extends BaseController {
             });
         
             if (!studentAssignment) {
-                return res.status(404).json({ error: new AssignmentNotFoundError().message, data: undefined, success: false });
+                return next(new AssignmentNotFoundError());
             }
         
             const studentAssignmentUpdated = await prisma.studentAssignment.update({
@@ -124,7 +124,8 @@ export class StudentAssignmentsController extends BaseController {
         
             res.status(200).json({ error: undefined, data: parseForResponse(studentAssignmentUpdated), success: true });
         } catch (error) {
-            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+            next(error);
         }
     }
 }
+
