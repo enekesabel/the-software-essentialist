@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { isUUID, parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateStudentDTO, isInvalidDTO } from "../dto";
 import { StudentsService } from "../service";
-import { ValidationError, ServerError, StudentNotFoundError } from "../Errors";
+import { ValidationError, StudentNotFoundError } from "../Errors";
 
 export class StudentsController extends BaseController {
 
@@ -19,84 +19,76 @@ export class StudentsController extends BaseController {
         this.router.get('/:id/grades', this.getStudentGrades.bind(this));
     }
 
-    async createStudent (req: Request, res: Response) {
+    async createStudent (req: Request, res: Response, next: NextFunction) {
         try {
             const createStudentDTO = CreateStudentDTO.Create(req.body);
             if (isInvalidDTO(createStudentDTO)) {
-                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
+                throw new ValidationError();
             }
     
             const student = await this.studentsService.createStudent(createStudentDTO);
 
             res.status(201).json({ error: undefined, data: parseForResponse(student), success: true });
         } catch (error) {
-            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+            next(error);
         }
     }
 
-    async getAllStudents (req: Request, res: Response) {
+    async getAllStudents (req: Request, res: Response, next: NextFunction) {
         try {
             const students = await this.studentsService.getAllStudents();
             res.status(200).json({ error: undefined, data: parseForResponse(students), success: true });
         } catch (error) {
-            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+            next(error);
         }
     }
 
-    async getStudentById(req: Request, res: Response) {
+    async getStudentById(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
-                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
+                throw new ValidationError();
             }
 
             const student = await this.studentsService.getStudentById(id);
         
             if (!student) {
-                return res.status(404).json({ error: new StudentNotFoundError().message, data: undefined, success: false });
+                throw new StudentNotFoundError();
             }
         
             res.status(200).json({ error: undefined, data: parseForResponse(student), success: true });
         } catch (error) {
-            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+            next(error);
         }
     }
 
-    async getStudentAssignments(req: Request, res: Response) {
+    async getStudentAssignments(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
-                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
+                throw new ValidationError();
             }
             
             const studentAssignments = await this.studentsService.getStudentAssignments(id);
         
             res.status(200).json({ error: undefined, data: parseForResponse(studentAssignments), success: true });
         } catch (error) {
-
-            if(error instanceof StudentNotFoundError) {
-                return res.status(404).json({ error: error.message, data: undefined, success: false });
-            }
-
-            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+            next(error);
         }
     }
 
-    async getStudentGrades(req: Request, res: Response) {
+    async getStudentGrades(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
-                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
+                throw new ValidationError();
             }
     
             const studentAssignments = await this.studentsService.getStudentGrades(id);
         
             res.status(200).json({ error: undefined, data: parseForResponse(studentAssignments), success: true });
         } catch (error) {
-            if(error instanceof StudentNotFoundError) {
-                return res.status(404).json({ error: error.message, data: undefined, success: false });
-            }
-            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+            next(error);
         }
     }
 }

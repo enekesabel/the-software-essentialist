@@ -1,9 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { ServerError } from "../Errors";
+import { BaseError, ServerError, StudentNotFoundError, ValidationError } from "../Errors";
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err) {
-        if(err instanceof ServerError) {
+        if(err instanceof StudentNotFoundError) {
+            return res.status(404).json({ error: err.message, data: undefined, success: false });
+        }
+        if(err instanceof ValidationError) {
+            return res.status(400).json({ error: err.message, data: undefined, success: false });
+        }
+        if(err instanceof BaseError) {
             return res.status(500).json({ error: err.message, data: undefined, success: false });
         }
         return res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
