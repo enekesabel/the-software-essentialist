@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { prisma } from "../database";
 import { isUUID, parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateClassDTO, isInvalidDTO } from "../dto";
-import { ValidationError, ServerError, ClassNotFoundError } from "../Errors";
+import { ValidationError, ClassNotFoundError } from "../Errors";
 
 export class ClassesController extends BaseController {
 
@@ -12,11 +12,11 @@ export class ClassesController extends BaseController {
         this.router.get('/:id/assignments', this.getAssignments);
     }
 
-    async create(req: Request, res: Response) {
+    async create(req: Request, res: Response, next: NextFunction) {
         try {
             const classDTO = CreateClassDTO.Create(req.body.name);
             if (isInvalidDTO(classDTO)) {
-                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
+                return next(new ValidationError());
             }
         
             const cls = await prisma.class.create({
@@ -25,15 +25,15 @@ export class ClassesController extends BaseController {
         
             res.status(201).json({ error: undefined, data: parseForResponse(cls), success: true });
         } catch (error) {
-            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+            next(error);
         }
     }
 
-    async getAssignments(req: Request, res: Response) {
+    async getAssignments(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
-                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
+                throw new ValidationError();
             }
 
             // check if class exists
@@ -44,7 +44,7 @@ export class ClassesController extends BaseController {
             });
 
             if (!cls) {
-                return res.status(404).json({ error: new ClassNotFoundError().message, data: undefined, success: false });
+                throw new ClassNotFoundError();
             }
 
             const assignments = await prisma.assignment.findMany({
@@ -59,8 +59,9 @@ export class ClassesController extends BaseController {
         
             res.status(200).json({ error: undefined, data: parseForResponse(assignments), success: true });
         } catch (error) {
-            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+            next(error);
         }
     }
 
 }
+
