@@ -1,9 +1,9 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { prisma } from "../database";
 import { parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { EnrollStudentToClassDTO, isInvalidDTO } from "../dto";
-import { ValidationError, ServerError, StudentAlreadyEnrolledError, ClassNotFoundError, StudentNotFoundError } from "../Errors";
+import { ValidationError, StudentAlreadyEnrolledError, ClassNotFoundError, StudentNotFoundError } from "../Errors";
 
 export class ClassEnrollmentsController extends BaseController {
 
@@ -11,11 +11,11 @@ export class ClassEnrollmentsController extends BaseController {
         this.router.post('/', this.enrollStudentToClass);
     }
 
-    async enrollStudentToClass(req: Request, res: Response) {
+    async enrollStudentToClass(req: Request, res: Response, next: NextFunction) {
         try {
             const enrollStudentToClassDTO = EnrollStudentToClassDTO.Create(req.body);
             if (isInvalidDTO(enrollStudentToClassDTO)) {
-                return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
+                return next(new ValidationError());
             }
         
             // check if student exists
@@ -26,7 +26,7 @@ export class ClassEnrollmentsController extends BaseController {
             });
         
             if (!student) {
-                return res.status(404).json({ error: new StudentNotFoundError().message, data: undefined, success: false });
+                return next(new StudentNotFoundError());
             }
         
             // check if class exists
@@ -42,11 +42,11 @@ export class ClassEnrollmentsController extends BaseController {
             });
     
             if (duplicatedClassEnrollment) {
-                return res.status(400).json({ error: new StudentAlreadyEnrolledError().message, data: undefined, success: false });
+                return next(new StudentAlreadyEnrolledError());
             }
         
             if (!cls) {
-                return res.status(404).json({ error: new ClassNotFoundError().message, data: undefined, success: false });
+                return next(new ClassNotFoundError());
             }
         
             const classEnrollment = await prisma.classEnrollment.create({
@@ -55,9 +55,10 @@ export class ClassEnrollmentsController extends BaseController {
         
             res.status(201).json({ error: undefined, data: parseForResponse(classEnrollment), success: true });
         } catch (error) {
-            res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+            next(error);
         }
      
     }
 
 }
+
