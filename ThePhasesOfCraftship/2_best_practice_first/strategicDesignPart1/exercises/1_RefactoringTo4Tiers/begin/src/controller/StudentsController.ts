@@ -12,11 +12,11 @@ export class StudentsController extends BaseController {
     }
    
     protected setUpRoutes(): void {
-        this.router.post('/', this.createStudent);
-        this.router.get('/', this.getAllStudents);
-        this.router.get('/:id', this.getStudentById);
-        this.router.get('/:id/assignments', this.getStudentAssignments);
-        this.router.get('/:id/grades', this.getStudentGrades);
+        this.router.post('/', this.createStudent.bind(this));
+        this.router.get('/', this.getAllStudents.bind(this));
+        this.router.get('/:id', this.getStudentById.bind(this));
+        this.router.get('/:id/assignments', this.getStudentAssignments.bind(this));
+        this.router.get('/:id/grades', this.getStudentGrades.bind(this));
     }
 
     async createStudent (req: Request, res: Response) {
@@ -36,7 +36,7 @@ export class StudentsController extends BaseController {
 
     async getAllStudents (req: Request, res: Response) {
         try {
-            const students = this.studentsService.getAllStudents();
+            const students = await this.studentsService.getAllStudents();
             res.status(200).json({ error: undefined, data: parseForResponse(students), success: true });
         } catch (error) {
             res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
@@ -50,7 +50,7 @@ export class StudentsController extends BaseController {
                 return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
             }
 
-            const student = this.studentsService.getStudentById(id);
+            const student = await this.studentsService.getStudentById(id);
         
             if (!student) {
                 return res.status(404).json({ error: new StudentNotFoundError().message, data: undefined, success: false });
@@ -69,7 +69,7 @@ export class StudentsController extends BaseController {
                 return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
             }
             
-            const studentAssignments = this.studentsService.getStudentAssignments(id);
+            const studentAssignments = await this.studentsService.getStudentAssignments(id);
         
             res.status(200).json({ error: undefined, data: parseForResponse(studentAssignments), success: true });
         } catch (error) {
@@ -89,7 +89,7 @@ export class StudentsController extends BaseController {
                 return res.status(400).json({ error: new ValidationError().message, data: undefined, success: false });
             }
     
-            const studentAssignments = this.studentsService.getStudentGrades(id);
+            const studentAssignments = await this.studentsService.getStudentGrades(id);
         
             res.status(200).json({ error: undefined, data: parseForResponse(studentAssignments), success: true });
         } catch (error) {
