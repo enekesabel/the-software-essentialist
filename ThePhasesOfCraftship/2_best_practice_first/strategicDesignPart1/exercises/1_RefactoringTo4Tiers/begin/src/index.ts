@@ -1,6 +1,7 @@
 import express from 'express';
 import { StudentsController, ClassesController, StudentAssignmentsController, AssignmentsController, ClassEnrollmentsController } from './controller';
 import { StudentsService } from './service';
+import { errorHandler } from './middleware';
 
 const cors = require('cors');
 const app = express();
@@ -24,6 +25,8 @@ app.use('/assignments', assignmentsController.router);
 
 const classEnrollmentsController = new ClassEnrollmentsController();
 app.use('/class-enrollments', classEnrollmentsController.router);
+
+app.use(errorHandler);
 
 const port = process.env.PORT || 3000;
 
