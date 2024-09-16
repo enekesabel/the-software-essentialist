@@ -10,7 +10,7 @@ export class AssingmentsRepository {
         });
     }
 
-    async findById(id: string) {
+    async getById(id: string) {
         return this.prisma.assignment.findUnique({
             include: {
                 class: true,
@@ -22,7 +22,7 @@ export class AssingmentsRepository {
         });
     }
 
-    async findByClassId(classId: string) {
+    async getByClassId(classId: string) {
         return this.prisma.assignment.findMany({
             where: {
                 classId

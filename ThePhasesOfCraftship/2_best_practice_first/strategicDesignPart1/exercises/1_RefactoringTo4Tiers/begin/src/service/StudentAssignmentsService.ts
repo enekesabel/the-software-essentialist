@@ -21,7 +21,7 @@ export class StudentAssignmentsService {
         }
 
         // check if assignment exists
-        const assignment = this.assignmentsRepository.findById(assignmentId);
+        const assignment = this.assignmentsRepository.getById(assignmentId);
 
         if (!assignment) {
             throw new AssignmentNotFoundError();

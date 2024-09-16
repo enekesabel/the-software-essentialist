@@ -21,7 +21,7 @@ export class ClassesService {
 
     async getAssignments(classId: string) {
         await this.getClassById(classId);
-        return await this.assignmentsRepository.findByClassId(classId);
+        return await this.assignmentsRepository.getByClassId(classId);
     }
 
     async createClass(classDTO: CreateClassDTO) {

@@ -11,7 +11,7 @@ export class AssignmentsService {
     }
 
     async getAssignmentById(id: string) {
-        const assignment = this.assignmentsRepository.findById(id);
+        const assignment = this.assignmentsRepository.getById(id);
         if (!assignment) {
             throw new AssignmentNotFoundError();
         }
