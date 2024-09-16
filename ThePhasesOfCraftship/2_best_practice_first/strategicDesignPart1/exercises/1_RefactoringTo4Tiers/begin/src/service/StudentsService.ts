@@ -27,7 +27,7 @@ export class StudentsService {
     }
 
     async getStudentById(id: string) {
-        return await prisma.student.findUnique({
+        const student = await prisma.student.findUnique({
             where: {
                 id
             },
@@ -37,6 +37,11 @@ export class StudentsService {
                 reportCards: true
             }
         });
+
+        if (!student) {
+            throw new StudentNotFoundError();
+        }
+        return student;
     }
 
     async getStudentAssignments(id: string) {

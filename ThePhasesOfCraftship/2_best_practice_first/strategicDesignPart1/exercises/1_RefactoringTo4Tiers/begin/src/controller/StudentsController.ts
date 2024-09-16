@@ -3,7 +3,7 @@ import { isUUID, parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateStudentDTO, isInvalidDTO } from "../dto";
 import { StudentsService } from "../service";
-import { ValidationError, StudentNotFoundError } from "../Errors";
+import { ValidationError } from "../Errors";
 
 export class StudentsController extends BaseController {
 
@@ -51,10 +51,6 @@ export class StudentsController extends BaseController {
             }
 
             const student = await this.studentsService.getStudentById(id);
-        
-            if (!student) {
-                throw new StudentNotFoundError();
-            }
         
             res.status(200).json({ error: undefined, data: parseForResponse(student), success: true });
         } catch (error) {
