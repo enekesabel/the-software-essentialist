@@ -1,27 +1,30 @@
 import { Request, Response, NextFunction } from "express";
-import { prisma } from "../database";
 import { isUUID, parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateAssignmentDTO, isInvalidDTO } from "../dto";
-import { ValidationError, AssignmentNotFoundError } from "../Errors";
+import { ValidationError } from "../Errors";
+import { AssignmentsService } from "../service";
+
 
 export class AssignmentsController extends BaseController {
 
-    protected setUpRoutes(): void {
-        this.router.post('/', this.create);
-        this.router.get('/:id', this.getById);
+    constructor(private assignmentsService: AssignmentsService) {
+        super();
     }
 
-    async create(req: Request, res: Response, next: NextFunction) {
+    protected setUpRoutes(): void {
+        this.router.post('/', this.createAssignment.bind(this));
+        this.router.get('/:id', this.getAssignmentById.bind(this));
+    }
+
+    async createAssignment(req: Request, res: Response, next: NextFunction) {
         try {
             const createAssignmentDTO = CreateAssignmentDTO.Create(req.body);
             if (isInvalidDTO(createAssignmentDTO)) {
                 return next(new ValidationError());
             }
         
-            const assignment = await prisma.assignment.create({
-                data: createAssignmentDTO
-            });
+            const assignment = await this.assignmentsService.createAssignment(createAssignmentDTO);
         
             res.status(201).json({ error: undefined, data: parseForResponse(assignment), success: true });
         } catch (err) {
@@ -29,30 +32,17 @@ export class AssignmentsController extends BaseController {
         }
     }
 
-    async getById(req: Request, res: Response, next: NextFunction) {
+    async getAssignmentById(req: Request, res: Response, next: NextFunction) {
         try {
             const { id } = req.params;
             if(!isUUID(id)) {
                 return next(new ValidationError());
             }
-            const assignment = await prisma.assignment.findUnique({
-                include: {
-                    class: true,
-                    studentTasks: true
-                },
-                where: {
-                    id
-                }
-            });
-        
-            if (!assignment) {
-                return next(new AssignmentNotFoundError());
-            }
+            const assignment = await this.assignmentsService.getAssignmentById(id);
         
             res.status(200).json({ error: undefined, data: parseForResponse(assignment), success: true });
         } catch (err) {
             next(err);
         }
     }
-
 }
