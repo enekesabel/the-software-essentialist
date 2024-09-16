@@ -2,7 +2,7 @@ import express from 'express';
 import { StudentsController, ClassesController, StudentAssignmentsController, AssignmentsController, ClassEnrollmentsController } from './controller';
 import { AssignmentsService, ClassEnrollmentsService, ClassesService, StudentAssignmentsService, StudentsService } from './service';
 import { errorHandler } from './middleware';
-import { AssingmentsRepository, ClassEnrollmentsRepository, ClassesRepository } from './persistence';
+import { AssingmentsRepository, ClassEnrollmentsRepository, ClassesRepository, StudentsRepository } from './persistence';
 import { prisma } from './database';
 
 const cors = require('cors');
@@ -14,13 +14,14 @@ app.use(cors());
 const assignmentsRepository = new AssingmentsRepository(prisma);
 const classesRepository = new ClassesRepository(prisma);
 const classEnrollmentsRepository = new ClassEnrollmentsRepository(prisma);
+const studentsRepository = new StudentsRepository(prisma);
 
 // Services
-const studentsService = new StudentsService();
+const studentsService = new StudentsService(studentsRepository);
 const classesService = new ClassesService(assignmentsRepository, classesRepository);
-const studentAssignmentsService = new StudentAssignmentsService(assignmentsRepository);
+const studentAssignmentsService = new StudentAssignmentsService(assignmentsRepository, studentsRepository);
 const assignmentsService = new AssignmentsService(assignmentsRepository);
-const classEnrollmentsService = new ClassEnrollmentsService(classesRepository, classEnrollmentsRepository);
+const classEnrollmentsService = new ClassEnrollmentsService(classesRepository, classEnrollmentsRepository, studentsRepository);
 
 // Controllers
 const studentsController = new StudentsController(studentsService);

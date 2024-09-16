@@ -1,42 +1,22 @@
-import { prisma } from "../database";
+import { PrismaClient } from "@prisma/client";
 import { CreateStudentDTO } from "../dto";
 import { StudentNotFoundError } from "../Errors";
+import { prisma } from "../database";
+import { StudentsRepository } from "../persistence";
 
 export class StudentsService {
-    async createStudent(createStudentDTO: CreateStudentDTO) {
-        const { name } = createStudentDTO;
+    constructor(private studentsRepository: StudentsRepository) {}
 
-        return await prisma.student.create({
-            data: {
-                name
-            }
-        });
+    async createStudent(createStudentDTO: CreateStudentDTO) {
+        return await this.studentsRepository.create(createStudentDTO);
     }
 
     async getAllStudents() {
-        return await prisma.student.findMany({
-            include: {
-                classes: true,
-                assignments: true,
-                reportCards: true
-            }, 
-            orderBy: {
-                name: 'asc'
-            }
-        });
+        return await this.studentsRepository.getAll();
     }
 
     async getStudentById(id: string) {
-        const student = await prisma.student.findUnique({
-            where: {
-                id
-            },
-            include: {
-                classes: true,
-                assignments: true,
-                reportCards: true
-            }
-        });
+        const student = await this.studentsRepository.getById(id);
 
         if (!student) {
             throw new StudentNotFoundError();
@@ -45,12 +25,7 @@ export class StudentsService {
     }
 
     async getStudentAssignments(id: string) {
-        // check if student exists
-        const student = await prisma.student.findUnique({
-            where: {
-                id
-            }
-        });
+        const student = await this.studentsRepository.getById(id);
 
         if (!student) {
             throw new StudentNotFoundError();
@@ -68,12 +43,7 @@ export class StudentsService {
     }
 
     async getStudentGrades(id: string) {
-        // check if student exists
-        const student = await prisma.student.findUnique({
-            where: {
-                id
-            }
-        });
+        const student = await this.studentsRepository.getById(id);
 
         if (!student) {
             throw new StudentNotFoundError();
@@ -93,3 +63,4 @@ export class StudentsService {
         });
     }
 }
+
