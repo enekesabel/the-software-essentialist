@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { isUUID, parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateClassDTO, isInvalidDTO } from "../dto";
 import { ValidationError } from "../Errors";
 import { ClassesService } from "../service";
+import { isUUID } from "./utils";
 
 export class ClassesController extends BaseController {
 
@@ -24,7 +24,7 @@ export class ClassesController extends BaseController {
             }
             
             const cls = await this.classesService.createClass(classDTO);
-            res.status(201).json({ error: undefined, data: parseForResponse(cls), success: true });
+            return this.sendSuccessResponse({status: 201, data: cls, res});
         } catch (error) {
             next(error);
         }
@@ -39,7 +39,7 @@ export class ClassesController extends BaseController {
 
             const assignments = await this.classesService.getAssignments(id);
 
-            res.status(200).json({ error: undefined, data: parseForResponse(assignments), success: true });
+            return this.sendSuccessResponse({status: 200, data: assignments, res});
         } catch (error) {
             next(error);
         }

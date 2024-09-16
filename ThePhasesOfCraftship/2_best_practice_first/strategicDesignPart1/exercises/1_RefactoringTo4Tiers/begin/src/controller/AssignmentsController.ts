@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { isUUID, parseForResponse } from "./utils";
+import { isUUID } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateAssignmentDTO, isInvalidDTO } from "../dto";
 import { ValidationError } from "../Errors";
@@ -26,7 +26,7 @@ export class AssignmentsController extends BaseController {
         
             const assignment = await this.assignmentsService.createAssignment(createAssignmentDTO);
         
-            res.status(201).json({ error: undefined, data: parseForResponse(assignment), success: true });
+            return this.sendSuccessResponse({status: 201, data: assignment, res});
         } catch (err) {
             next(err);
         }
@@ -40,9 +40,10 @@ export class AssignmentsController extends BaseController {
             }
             const assignment = await this.assignmentsService.getAssignmentById(id);
         
-            res.status(200).json({ error: undefined, data: parseForResponse(assignment), success: true });
+            return this.sendSuccessResponse({status: 200, data: assignment, res});
         } catch (err) {
             next(err);
         }
     }
 }
+

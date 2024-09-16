@@ -1,4 +1,5 @@
-import { Router } from "express";
+import { Router, Response } from "express";
+import { ResponseBuilder } from "./utils";
 
 export abstract class BaseController {
     readonly router: Router;
@@ -9,4 +10,8 @@ export abstract class BaseController {
     }
 
     protected abstract setUpRoutes(): void;
+
+    protected sendSuccessResponse<T>({status, data, res}: {status: number, data: T, res: Response}) {
+        return new ResponseBuilder<T>(res).status(status).data(data).build();
+    }
 }

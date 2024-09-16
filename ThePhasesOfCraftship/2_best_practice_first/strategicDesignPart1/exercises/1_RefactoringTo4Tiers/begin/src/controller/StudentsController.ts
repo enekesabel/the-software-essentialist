@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { isUUID, parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateStudentDTO, isInvalidDTO } from "../dto";
 import { StudentsService } from "../service";
 import { ValidationError } from "../Errors";
+import { isUUID } from "./utils";
 
 export class StudentsController extends BaseController {
 
@@ -28,7 +28,7 @@ export class StudentsController extends BaseController {
     
             const student = await this.studentsService.createStudent(createStudentDTO);
 
-            res.status(201).json({ error: undefined, data: parseForResponse(student), success: true });
+            return this.sendSuccessResponse({status: 201, data: student, res});
         } catch (error) {
             next(error);
         }
@@ -37,7 +37,8 @@ export class StudentsController extends BaseController {
     async getAllStudents (req: Request, res: Response, next: NextFunction) {
         try {
             const students = await this.studentsService.getAllStudents();
-            res.status(200).json({ error: undefined, data: parseForResponse(students), success: true });
+
+            return this.sendSuccessResponse({status: 200, data: students, res});
         } catch (error) {
             next(error);
         }
@@ -52,7 +53,7 @@ export class StudentsController extends BaseController {
 
             const student = await this.studentsService.getStudentById(id);
         
-            res.status(200).json({ error: undefined, data: parseForResponse(student), success: true });
+            return this.sendSuccessResponse({status: 200, data: student, res});
         } catch (error) {
             next(error);
         }
@@ -67,7 +68,7 @@ export class StudentsController extends BaseController {
             
             const studentAssignments = await this.studentsService.getStudentAssignments(id);
         
-            res.status(200).json({ error: undefined, data: parseForResponse(studentAssignments), success: true });
+            return this.sendSuccessResponse({status: 200, data: studentAssignments, res});
         } catch (error) {
             next(error);
         }
@@ -82,7 +83,7 @@ export class StudentsController extends BaseController {
     
             const studentAssignments = await this.studentsService.getStudentGrades(id);
         
-            res.status(200).json({ error: undefined, data: parseForResponse(studentAssignments), success: true });
+            return this.sendSuccessResponse({status: 200, data: studentAssignments, res});
         } catch (error) {
             next(error);
         }

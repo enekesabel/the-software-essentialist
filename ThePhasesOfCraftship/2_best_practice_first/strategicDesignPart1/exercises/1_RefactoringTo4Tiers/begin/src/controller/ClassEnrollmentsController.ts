@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { EnrollStudentToClassDTO, isInvalidDTO } from "../dto";
 import { ValidationError } from "../Errors";
@@ -21,10 +20,11 @@ export class ClassEnrollmentsController extends BaseController {
                 throw new ValidationError();
             }
             const classEnrollment = await this.classEnrollmentsService.enrollStudentToClass(enrollStudentToClassDTO);
-            res.status(201).json({ error: undefined, data: parseForResponse(classEnrollment), success: true });
+            return this.sendSuccessResponse({status: 201, data: classEnrollment, res});
         } catch (error) {
             next(error);
         }
     }
 
 }
+

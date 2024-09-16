@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { parseForResponse } from "./utils";
 import { BaseController } from "./BaseController";
 import { CreateStudentAssignmentDTO, GradeStudentAssignmentDTO, isInvalidDTO } from "../dto";
 import { ValidationError } from "../Errors";
@@ -26,7 +25,7 @@ export class StudentAssignmentsController extends BaseController {
 
             const studentAssignment = await this.studentAssignmentsService.createStudentAssignment(createStudentAssignmentDTO);
 
-            res.status(201).json({ error: undefined, data: parseForResponse(studentAssignment), success: true });
+            return this.sendSuccessResponse({status: 201, data: studentAssignment, res});
         } catch (error) {
             next(error);
         }
@@ -42,7 +41,7 @@ export class StudentAssignmentsController extends BaseController {
 
             const studentAssignmentUpdated = await this.studentAssignmentsService.submitStudentAssignment(id);
 
-            res.status(200).json({ error: undefined, data: parseForResponse(studentAssignmentUpdated), success: true });
+            return this.sendSuccessResponse({status: 200, data: studentAssignmentUpdated, res});
         } catch (error) {
             next(error);
         }
@@ -57,10 +56,9 @@ export class StudentAssignmentsController extends BaseController {
 
             const studentAssignmentUpdated = await this.studentAssignmentsService.gradeStudentAssignment(gradeStudentAssignmentDTO);
 
-            res.status(200).json({ error: undefined, data: parseForResponse(studentAssignmentUpdated), success: true });
+            return this.sendSuccessResponse({status: 200, data: studentAssignmentUpdated, res});
         } catch (error) {
             next(error);
         }
     }
 }
-
