@@ -2,11 +2,17 @@ import express from 'express';
 import { StudentsController, ClassesController, StudentAssignmentsController, AssignmentsController, ClassEnrollmentsController } from './controller';
 import { AssignmentsService, ClassEnrollmentsService, ClassesService, StudentAssignmentsService, StudentsService } from './service';
 import { errorHandler } from './middleware';
+import { AssingmentsRepository } from './persistence';
+import { prisma } from './database';
 
 const cors = require('cors');
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+// Persistence
+
+const assignmentsRepository = new AssingmentsRepository(prisma);
 
 // API Endpoints
 
@@ -14,15 +20,15 @@ const studentsService = new StudentsService();
 const studentsController = new StudentsController(studentsService);
 app.use('/students', studentsController.router);
 
-const classesService = new ClassesService();
+const classesService = new ClassesService(assignmentsRepository);
 const classesController = new ClassesController(classesService);
 app.use('/classes', classesController.router);
 
-const studentAssignmentsService = new StudentAssignmentsService();
+const studentAssignmentsService = new StudentAssignmentsService(assignmentsRepository);
 const studentAssignmentsController = new StudentAssignmentsController(studentAssignmentsService);
 app.use('/student-assignments', studentAssignmentsController.router);
 
-const assignmentsService = new AssignmentsService();
+const assignmentsService = new AssignmentsService(assignmentsRepository);
 const assignmentsController = new AssignmentsController(assignmentsService);
 app.use('/assignments', assignmentsController.router);
 

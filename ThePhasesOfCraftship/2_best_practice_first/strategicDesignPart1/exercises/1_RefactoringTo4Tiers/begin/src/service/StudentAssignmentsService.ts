@@ -1,8 +1,12 @@
 import { prisma } from "../database";
 import { CreateStudentAssignmentDTO, GradeStudentAssignmentDTO } from "../dto";
 import { StudentNotFoundError, AssignmentNotFoundError } from "../Errors";
+import { AssingmentsRepository } from "../persistence";
 
 export class StudentAssignmentsService {
+
+    constructor(private assignmentsRepository: AssingmentsRepository) {}
+
     async createStudentAssignment(createStudentAssignmentDTO: CreateStudentAssignmentDTO) {
         const { studentId, assignmentId } = createStudentAssignmentDTO;
 
@@ -18,11 +22,7 @@ export class StudentAssignmentsService {
         }
 
         // check if assignment exists
-        const assignment = await prisma.assignment.findUnique({
-            where: {
-                id: assignmentId
-            }
-        });
+        const assignment = await this.assignmentsRepository.findById(assignmentId);
 
         if (!assignment) {
             throw new AssignmentNotFoundError();

@@ -1,8 +1,11 @@
 import { prisma } from "../database";
 import { CreateClassDTO } from "../dto";
 import { ClassNotFoundError } from "../Errors";
+import { AssingmentsRepository } from "../persistence";
 
 export class ClassesService {
+
+    constructor(private assignmentsRepository: AssingmentsRepository) {}
 
     async getClassById(id: string) {
         const cls = await prisma.class.findUnique({
@@ -20,15 +23,7 @@ export class ClassesService {
 
     async getAssignments(classId: string) {
         await this.getClassById(classId);
-        return await prisma.assignment.findMany({
-            where: {
-                classId
-            },
-            include: {
-                class: true,
-                studentTasks: true
-            }
-        });
+        return await this.assignmentsRepository.findByClassId(classId);
     }
 
     async createClass(classDTO: CreateClassDTO) {

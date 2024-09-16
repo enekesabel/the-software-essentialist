@@ -1,0 +1,1 @@
+export { AssingmentsRepository } from "./AssignmentsRepository";
