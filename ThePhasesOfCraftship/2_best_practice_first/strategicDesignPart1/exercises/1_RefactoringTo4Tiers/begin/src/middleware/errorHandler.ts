@@ -1,27 +1,30 @@
 import { Request, Response, NextFunction } from "express";
 import { AssignmentNotFoundError, BaseError, ClassNotFoundError, ServerError, StudentAlreadyEnrolledError, StudentNotFoundError, ValidationError } from "../Errors";
+import { ResponseBuilder } from "../controller/utils";
 
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
     if (err) {
+        const responseBuilder = new ResponseBuilder(res);
+        responseBuilder.error(err.message);
         if(err instanceof StudentAlreadyEnrolledError) {
-            return res.status(400).json({ error: err.message, data: undefined, success: false });
+            return responseBuilder.status(400).build();
         }
         if(err instanceof AssignmentNotFoundError){
-            return res.status(404).json({ error: err.message, data: undefined, success: false });
+            return responseBuilder.status(404).build();
         }
         if(err instanceof StudentNotFoundError) {
-            return res.status(404).json({ error: err.message, data: undefined, success: false });
+            return responseBuilder.status(404).build();
         }
         if(err instanceof ClassNotFoundError) {
-            return res.status(404).json({ error: err.message, data: undefined, success: false });
+            return responseBuilder.status(404).build();
         }
         if(err instanceof ValidationError) {
-            return res.status(400).json({ error: err.message, data: undefined, success: false });
+            return responseBuilder.status(400).build();
         }
         if(err instanceof BaseError) {
-            return res.status(500).json({ error: err.message, data: undefined, success: false });
+            return responseBuilder.status(500).build();
         }
-        return res.status(500).json({ error: new ServerError().message, data: undefined, success: false });
+        return responseBuilder.status(500).error(new ServerError().message).build();
     } else {
         next();
     }
