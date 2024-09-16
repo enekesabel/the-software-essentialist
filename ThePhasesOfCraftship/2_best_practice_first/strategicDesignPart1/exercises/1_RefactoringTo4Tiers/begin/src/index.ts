@@ -11,29 +11,27 @@ app.use(express.json());
 app.use(cors());
 
 // Persistence
-
 const assignmentsRepository = new AssingmentsRepository(prisma);
 
-// API Endpoints
-
+// Services
 const studentsService = new StudentsService();
-const studentsController = new StudentsController(studentsService);
-app.use('/students', studentsController.router);
-
 const classesService = new ClassesService(assignmentsRepository);
-const classesController = new ClassesController(classesService);
-app.use('/classes', classesController.router);
-
 const studentAssignmentsService = new StudentAssignmentsService(assignmentsRepository);
-const studentAssignmentsController = new StudentAssignmentsController(studentAssignmentsService);
-app.use('/student-assignments', studentAssignmentsController.router);
-
 const assignmentsService = new AssignmentsService(assignmentsRepository);
-const assignmentsController = new AssignmentsController(assignmentsService);
-app.use('/assignments', assignmentsController.router);
-
 const classEnrollmentsService = new ClassEnrollmentsService();
+
+// Controllers
+const studentsController = new StudentsController(studentsService);
+const classesController = new ClassesController(classesService);
+const studentAssignmentsController = new StudentAssignmentsController(studentAssignmentsService);
+const assignmentsController = new AssignmentsController(assignmentsService);
 const classEnrollmentsController = new ClassEnrollmentsController(classEnrollmentsService);
+
+// API Endpoints
+app.use('/students', studentsController.router);
+app.use('/classes', classesController.router);
+app.use('/student-assignments', studentAssignmentsController.router);
+app.use('/assignments', assignmentsController.router);
 app.use('/class-enrollments', classEnrollmentsController.router);
 
 app.use(errorHandler);
