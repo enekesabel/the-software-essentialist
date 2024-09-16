@@ -1,6 +1,6 @@
 import express from 'express';
 import { StudentsController, ClassesController, StudentAssignmentsController, AssignmentsController, ClassEnrollmentsController } from './controller';
-import { AssignmentsService, ClassEnrollmentsService, StudentsService } from './service';
+import { AssignmentsService, ClassEnrollmentsService, ClassesService, StudentsService } from './service';
 import { errorHandler } from './middleware';
 
 const cors = require('cors');
@@ -14,7 +14,8 @@ const studentsService = new StudentsService();
 const studentsController = new StudentsController(studentsService);
 app.use('/students', studentsController.router);
 
-const classesController = new ClassesController();
+const classesService = new ClassesService();
+const classesController = new ClassesController(classesService);
 app.use('/classes', classesController.router);
 
 const studentAssignmentsController = new StudentAssignmentsController();
