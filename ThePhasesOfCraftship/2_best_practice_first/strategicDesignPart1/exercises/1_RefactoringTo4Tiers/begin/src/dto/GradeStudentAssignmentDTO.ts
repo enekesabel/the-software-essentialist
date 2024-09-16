@@ -1,13 +1,12 @@
+import { AssingmentGradeDTO, Grade } from "./AssignmentGradeDTO";
 import { DTOValidationError } from "./utils";
-
-const validGrades = ['A', 'B', 'C', 'D'] as const;
-type Grade = typeof validGrades[number];
 
 export class GradeStudentAssignmentDTO {
 
-    static Create({id, grade}: {id: string, grade: Grade}): GradeStudentAssignmentDTO | DTOValidationError {
-        if(id && validGrades.includes(grade)){
-            return new GradeStudentAssignmentDTO(id, grade);
+    static Create({id, grade}: {id: string, grade: string}): GradeStudentAssignmentDTO | DTOValidationError {
+        const assignmentGradeDTO = AssingmentGradeDTO.Create(grade);
+        if(id && assignmentGradeDTO instanceof AssingmentGradeDTO){
+            return new GradeStudentAssignmentDTO(id, assignmentGradeDTO.grade);
         }
         return new DTOValidationError();
     }
