@@ -1,8 +1,12 @@
 import { prisma } from "../database";
 import { EnrollStudentToClassDTO } from "../dto";
 import { StudentNotFoundError, StudentAlreadyEnrolledError, ClassNotFoundError } from "../Errors";
+import { ClassesRepository } from "../persistence";
 
 export class ClassEnrollmentsService {
+
+    constructor(private classesRepository: ClassesRepository) {}
+
     async enrollStudentToClass(enrollStudentToClassDTO: EnrollStudentToClassDTO) {
     
         // check if student exists
@@ -17,11 +21,7 @@ export class ClassEnrollmentsService {
         }
     
         // check if class exists
-        const cls = await prisma.class.findUnique({
-            where: {
-                id: enrollStudentToClassDTO.classId
-            }
-        });
+        const cls = this.classesRepository.getById(enrollStudentToClassDTO.classId);
     
         // check if student is already enrolled in class
         const duplicatedClassEnrollment = await prisma.classEnrollment.findFirst({
