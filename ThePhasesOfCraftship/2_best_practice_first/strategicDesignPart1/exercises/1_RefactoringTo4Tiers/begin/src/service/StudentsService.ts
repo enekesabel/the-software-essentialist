@@ -1,11 +1,12 @@
-import { PrismaClient } from "@prisma/client";
 import { CreateStudentDTO } from "../dto";
 import { StudentNotFoundError } from "../Errors";
-import { prisma } from "../database";
-import { StudentsRepository } from "../persistence";
+import { StudentAssignmentsRepository, StudentsRepository } from "../persistence";
 
 export class StudentsService {
-    constructor(private studentsRepository: StudentsRepository) {}
+    constructor(
+        private studentsRepository: StudentsRepository,
+        private studentAssignmentsRepository: StudentAssignmentsRepository
+    ) {}
 
     async createStudent(createStudentDTO: CreateStudentDTO) {
         return await this.studentsRepository.create(createStudentDTO);
@@ -31,15 +32,7 @@ export class StudentsService {
             throw new StudentNotFoundError();
         }
 
-        return await prisma.studentAssignment.findMany({
-            where: {
-                studentId: id,
-                status: 'submitted'
-            },
-            include: {
-                assignment: true
-            },
-        });
+        return await this.studentAssignmentsRepository.getAllByStudentId(id);
     }
 
     async getStudentGrades(id: string) {
@@ -49,18 +42,7 @@ export class StudentsService {
             throw new StudentNotFoundError();
         }
 
-        return await prisma.studentAssignment.findMany({
-            where: {
-                studentId: id,
-                status: 'submitted',
-                grade: {
-                    not: null
-                }
-            },
-            include: {
-                assignment: true
-            },
-        });
+        return await this.studentAssignmentsRepository.getAllGradedByStudentId(id);
     }
 }
 
