@@ -5,12 +5,15 @@ import { app } from "../../src";
 import { defineFeature, loadFeature } from "jest-cucumber";
 import path from "path";
 import supertest from "supertest";
+import { resetDatabase } from "../fixtures/reset";
 
 const feature = loadFeature(
   path.join(__dirname, "../features/createClassRoom.feature")
 );
 
 defineFeature(feature, (test) => {
+
+    beforeEach(resetDatabase);
 
     afterAll(() => {
         app.close();
