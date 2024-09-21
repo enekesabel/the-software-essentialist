@@ -13,3 +13,9 @@ Feature: Create Class Room
         Given I want to create a class room with no name
         When I send a request to create a class room
         Then the class room should not be created
+
+    Scenario: Fail to create a class room with the same name
+        Given A class room named "Math" already exists
+        And I want to create a class room with the same name
+        When I send a request to create a class room
+        Then the class room should not be created     

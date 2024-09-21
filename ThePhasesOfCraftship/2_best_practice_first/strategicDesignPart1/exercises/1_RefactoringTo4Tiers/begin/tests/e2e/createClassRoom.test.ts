@@ -6,6 +6,8 @@ import { defineFeature, loadFeature } from "jest-cucumber";
 import path from "path";
 import supertest from "supertest";
 import { resetDatabase } from "../fixtures/reset";
+import { Class } from "@prisma/client";
+import { ClassRoomBuilder } from "../fixtures/ClassRoomBuilder";
 
 const feature = loadFeature(
   path.join(__dirname, "../features/createClassRoom.feature")
@@ -56,4 +58,28 @@ defineFeature(feature, (test) => {
 
         });
     });
+
+    test('Fail to create a class room with the same name', ({ given, and, when, then }) => {
+      let classRoom: Class;
+      let requestBody: any = {};
+      let response: supertest.Response;
+
+      given(/^A class room named "(.*)" already exists$/, async (name) => {
+        classRoom = await new ClassRoomBuilder().withName(name).build();
+      });
+
+      and("I want to create a class room with the same name", () => {
+        requestBody = {
+          name: classRoom.name,
+        };
+      });
+
+      when('I send a request to create a class room', async () => {
+        response = await request(app).post("/classes").send(requestBody);
+      });
+
+      then('the class room should not be created', () => {
+        expect(response.status).toBe(500);
+      });
+  });
 });
