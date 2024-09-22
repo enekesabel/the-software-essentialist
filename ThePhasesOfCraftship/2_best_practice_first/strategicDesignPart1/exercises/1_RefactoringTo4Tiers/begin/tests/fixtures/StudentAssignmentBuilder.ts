@@ -8,12 +8,12 @@ export class StudentAssignmentBuilder {
   private studentOrBuilder?: StudentBuilder | Student;
   private assignmentOrBuilder?: AssignmentBuilder | Assignment;
 
-  withStudent(studentOrBuilder: StudentBuilder | Student) {
+  andStudent(studentOrBuilder: StudentBuilder | Student) {
     this.studentOrBuilder = studentOrBuilder;
     return this;
   }
   
-  withAssingment(assignmentOrBuilder: AssignmentBuilder | Assignment) {
+  fromAssignment(assignmentOrBuilder: AssignmentBuilder | Assignment) {
     this.assignmentOrBuilder = assignmentOrBuilder;
     return this;
   }

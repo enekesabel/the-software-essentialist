@@ -23,8 +23,8 @@ defineFeature(feature, (test) => {
     const givenIHaveAStudentAssignment = ({given}:{given: DefineStepFunction}) => {
         given('I have a student assignment', async() => {
             studentAssignment = await new StudentAssignmentBuilder()
-            .withAssingment(new AssignmentBuilder().withTitle('Math Assignment').andClassRoom(new ClassRoomBuilder().withName('Math Class')))
-            .withStudent(new StudentBuilder().withName('John Doe'))
+            .fromAssignment(new AssignmentBuilder().withTitle('Math Assignment').andClassRoom(new ClassRoomBuilder().withName('Math Class')))
+            .andStudent(new StudentBuilder().withName('John Doe'))
             .build();
         });
     }

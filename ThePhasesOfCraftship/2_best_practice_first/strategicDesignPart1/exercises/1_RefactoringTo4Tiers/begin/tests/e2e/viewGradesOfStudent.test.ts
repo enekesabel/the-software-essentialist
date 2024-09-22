@@ -29,8 +29,8 @@ defineFeature(feature, (test) => {
             const classRoom = await new ClassRoomBuilder().withName('Math Class').build();
             const algebraAssignment = await new AssignmentBuilder().withTitle('Algebra Assignment').andClassRoom(classRoom).build();
             const geometryAssignment = await new AssignmentBuilder().withTitle('Geometry Assignment').andClassRoom(classRoom).build();
-            studentAssignments[0] = await new StudentAssignmentBuilder().withAssingment(algebraAssignment).withStudent(student).withGrade('A').withStatus('submitted').build();
-            studentAssignments[1] = await new StudentAssignmentBuilder().withAssingment(geometryAssignment).withStudent(student).withStatus('submitted').build();
+            studentAssignments[0] = await new StudentAssignmentBuilder().fromAssignment(algebraAssignment).andStudent(student).withGrade('A').withStatus('submitted').build();
+            studentAssignments[1] = await new StudentAssignmentBuilder().fromAssignment(geometryAssignment).andStudent(student).withStatus('submitted').build();
         });
 
         when('I try to view all grades of the student', async () => {
