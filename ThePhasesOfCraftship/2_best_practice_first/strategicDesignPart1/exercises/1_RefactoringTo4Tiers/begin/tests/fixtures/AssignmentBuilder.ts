@@ -1,23 +1,23 @@
-import { Assignment } from "@prisma/client";
+import { Assignment, Class } from "@prisma/client";
 import { prisma } from "../../src/database";
 import { ClassRoomBuilder } from "./ClassRoomBuilder";
 
 export class AssignmentBuilder {
   private assignment = {} as Assignment;
-  private classRoomBuilder?: ClassRoomBuilder
+  private classRoomOrBuilder?: ClassRoomBuilder | Class
 
   withTitle(title: string): AssignmentBuilder {
     this.assignment.title = title;
     return this;
   }
 
-  andClassRoom(classRoomBuilder: ClassRoomBuilder) {
-    this.classRoomBuilder = classRoomBuilder;
+  andClassRoom(classRoomOrBuilder: ClassRoomBuilder | Class) {
+    this.classRoomOrBuilder = classRoomOrBuilder;
     return this;
   }
 
   async build(): Promise<Assignment> {
-    const classRoom = await this.classRoomBuilder?.build();
+    const classRoom = this.classRoomOrBuilder instanceof ClassRoomBuilder ? await this.classRoomOrBuilder.build() : this.classRoomOrBuilder;
     const createdAssignment = await prisma.assignment.create({
       data: {
         title: this.assignment.title,
