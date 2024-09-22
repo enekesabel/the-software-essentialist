@@ -1,20 +1,20 @@
-import { StudentAssignment } from '@prisma/client';
+import { StudentAssignment, Assignment, Student } from '@prisma/client';
 import { prisma } from "../../src/database";
 import { AssignmentBuilder } from './AssignmentBuilder';
 import { StudentBuilder } from './StudentBuilder';
 
 export class StudentAssignmentBuilder {
   private studentAssignment = {} as StudentAssignment;
-  private studentBuilder?: StudentBuilder;
-  private assignmentBuilder?: AssignmentBuilder;
+  private studentOrBuilder?: StudentBuilder | Student;
+  private assignmentOrBuilder?: AssignmentBuilder | Assignment;
 
-  withStudent(studentBuilder: StudentBuilder) {
-    this.studentBuilder = studentBuilder;
+  withStudent(studentOrBuilder: StudentBuilder | Student) {
+    this.studentOrBuilder = studentOrBuilder;
     return this;
   }
   
-  withAssingment(assignmentBuilder: AssignmentBuilder) {
-    this.assignmentBuilder = assignmentBuilder;
+  withAssingment(assignmentOrBuilder: AssignmentBuilder | Assignment) {
+    this.assignmentOrBuilder = assignmentOrBuilder;
     return this;
   }
 
@@ -29,8 +29,8 @@ export class StudentAssignmentBuilder {
   }
 
   async build() {
-    const student = await this.studentBuilder?.build();
-    const assignment = await this.assignmentBuilder?.build();
+    const student = this.studentOrBuilder instanceof StudentBuilder ? await this.studentOrBuilder.build() : this.studentOrBuilder;
+    const assignment = this.assignmentOrBuilder instanceof AssignmentBuilder ? await this.assignmentOrBuilder.build() : this.assignmentOrBuilder;
 
     return await prisma.studentAssignment.create({
       data: {
