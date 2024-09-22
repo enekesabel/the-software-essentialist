@@ -1,5 +1,9 @@
 Feature: Submit Student Assignment
 
+    As a student
+    I want to be able to submit my assignments
+    So my teachers can grade them
+
     Background:
         Given I have a student assignment
 

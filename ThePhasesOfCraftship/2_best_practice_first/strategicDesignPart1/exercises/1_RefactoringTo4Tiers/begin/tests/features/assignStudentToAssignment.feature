@@ -1,5 +1,9 @@
 Feature: Assign Student to Assignment
 
+    As a teacher
+    I want to assign students to assignments
+    So I can grade them
+
     Background:
         Given I have a student
         And I have an assignment
