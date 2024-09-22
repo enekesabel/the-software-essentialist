@@ -35,7 +35,7 @@ defineFeature(feature, (test) => {
       classId = classRoom.id;
     });
 
-    when('I send a request to enroll the student in the class', async () => {
+    when('I try to enroll the student in the class', async () => {
       requestBody = { studentId, classId };
       response = await request(app).post("/class-enrollments").send(requestBody);
     });
@@ -57,12 +57,12 @@ defineFeature(feature, (test) => {
       classId = classRoom.id;
     });
 
-    when('I send a request to enroll a student in the class with missing student ID', async () => {
+    when('I try to enroll the student in the class without providing a student ID', async () => {
       requestBody = { classId };
       response = await request(app).post("/class-enrollments").send(requestBody);
     });
 
-    then('the request should return a validation error', () => {
+    then('I should get a validation error', () => {
       expect(response.status).toBe(400);
       expect(response.body.error).toBe(Errors.ValidationError);
     });
@@ -78,12 +78,12 @@ defineFeature(feature, (test) => {
       studentId = student.id;
     });
 
-    when('I send a request to enroll the student in a class with missing class ID', async () => {
+    when('I try to enroll the student in the class without providing a class ID', async () => {
       requestBody = { studentId };
       response = await request(app).post("/class-enrollments").send(requestBody);
     });
 
-    then('the request should return a validation error', () => {
+    then('I should get a validation error', () => {
       expect(response.status).toBe(400);
       expect(response.body.error).toBe(Errors.ValidationError);
     });
@@ -99,12 +99,12 @@ defineFeature(feature, (test) => {
       classId = classRoom.id;
     });
 
-    when('I send a request to enroll a non-existent student in the class', async () => {
+    when('I try to enroll a student with non-existent student ID in the class', async () => {
       requestBody = { studentId: "non-existent-student-id", classId };
       response = await request(app).post("/class-enrollments").send(requestBody);
     });
 
-    then('the request should return a student not found error', () => {
+    then('I should get a student not found error', () => {
       expect(response.status).toBe(404);
       expect(response.body.error).toBe(Errors.StudentNotFound);
     });
@@ -120,12 +120,12 @@ defineFeature(feature, (test) => {
       studentId = student.id;
     });
 
-    when('I send a request to enroll the student in a non-existent class', async () => {
+    when('I try to enroll the student in a non-existent class', async () => {
       requestBody = { studentId, classId: "non-existent-class-id" };
       response = await request(app).post("/class-enrollments").send(requestBody);
     });
 
-    then('the request should return a class not found error', () => {
+    then('I should get a class not found error', () => {
       expect(response.status).toBe(404);
       expect(response.body.error).toBe(Errors.ClassNotFound);
     });

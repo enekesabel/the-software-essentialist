@@ -6,10 +6,10 @@ Feature: Create Student
 
     Scenario: Successfully create a student
         Given I want to create a student with name "John Doe"
-        When I send a request to create a student
+        When I try to create the student
         Then the student should be created successfully
 
-    Scenario: Fail to create a student
+    Scenario: Fail to create a student with no name
         Given I want to create a student with no name
-        When I send a request to create a student
-        Then the student should not be created
+        When I try to create the student
+        Then I should get a validation error

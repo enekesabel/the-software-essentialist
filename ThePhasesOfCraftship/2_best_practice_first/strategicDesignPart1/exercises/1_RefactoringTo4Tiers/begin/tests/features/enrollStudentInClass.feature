@@ -2,30 +2,30 @@ Feature: Enroll Student in Class
 
     As an administrator
     I want to enroll a student in a class
-    So that I can manage student-class relationships
+    So that I can manage students in classes
 
     Scenario: Successfully enroll a student in a class
         Given I have a student with name "John Doe"
         And I have a class with name "Math 101"
-        When I send a request to enroll the student in the class
+        When I try to enroll the student in the class
         Then the student should be enrolled in the class successfully
 
     Scenario: Fail to enroll a student in a class with missing student ID
         Given I have a class with name "Math 101"
-        When I send a request to enroll a student in the class with missing student ID
-        Then the request should return a validation error
+        When I try to enroll the student in the class without providing a student ID
+        Then I should get a validation error
 
     Scenario: Fail to enroll a student in a class with missing class ID
         Given I have a student with name "John Doe"
-        When I send a request to enroll the student in a class with missing class ID
-        Then the request should return a validation error
+        When I try to enroll the student in the class without providing a class ID
+        Then I should get a validation error
 
     Scenario: Fail to enroll a student in a class with non-existent student
         Given I have a class with name "Math 101"
-        When I send a request to enroll a non-existent student in the class
-        Then the request should return a student not found error
+        When I try to enroll a student with non-existent student ID in the class
+        Then I should get a student not found error
 
     Scenario: Fail to enroll a student in a class with non-existent class
         Given I have a student with name "John Doe"
-        When I send a request to enroll the student in a non-existent class
-        Then the request should return a class not found error
+        When I try to enroll the student in a non-existent class
+        Then I should get a class not found error

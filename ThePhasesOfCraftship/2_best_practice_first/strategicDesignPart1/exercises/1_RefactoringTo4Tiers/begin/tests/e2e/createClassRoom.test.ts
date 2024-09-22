@@ -1,6 +1,6 @@
 import request from "supertest";
 //import { Response } from "express";
-import { app } from "../../src";
+import { app, Errors } from "../../src";
 
 import { defineFeature, loadFeature } from "jest-cucumber";
 import path from "path";
@@ -31,7 +31,7 @@ defineFeature(feature, (test) => {
           };
         });
     
-        when("I send a request to create a class room", async () => {
+        when('I try to create the class room', async () => {
           response = await request(app).post("/classes").send(requestBody);
         });
     
@@ -41,7 +41,7 @@ defineFeature(feature, (test) => {
         });
       });
 
-    test('Fail to create a class room', ({ given, when, then }) => {
+    test('Fail to create a class room with no name', ({ given, when, then }) => {
         let requestBody: any = {};
         let response: supertest.Response;
         
@@ -49,13 +49,13 @@ defineFeature(feature, (test) => {
             requestBody = {};
         });
 
-        when('I send a request to create a class room', async () => {
+        when('I try to create the class room', async () => {
             response = await request(app).post("/classes").send(requestBody);
         });
 
-        then('the class room should not be created', () => {
+        then('I should get a validation error', () => {
             expect(response.status).toBe(400);
-
+            expect(response.body.error).toBe(Errors.ValidationError);
         });
     });
 
@@ -74,11 +74,11 @@ defineFeature(feature, (test) => {
         };
       });
 
-      when('I send a request to create a class room', async () => {
+      when('I try to create the class room', async () => {
         response = await request(app).post("/classes").send(requestBody);
       });
 
-      then('the class room should not be created', () => {
+      then('I should get an error', () => {
         expect(response.status).toBe(500);
       });
   });

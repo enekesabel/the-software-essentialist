@@ -32,7 +32,7 @@ defineFeature(feature, (test) => {
       title = assignmentTitle;
     });
 
-    when('I send a request to create an assignment', async () => {
+    when('I try to create the assignment', async () => {
       requestBody = { title, classId };
       response = await request(app).post("/assignments").send(requestBody);
     });
@@ -57,12 +57,12 @@ defineFeature(feature, (test) => {
     and('I want to create an assignment with no title', async () => {
     });
 
-    when('I send a request to create an assignment', async () => {
+    when('I try to create the assignment', async () => {
       requestBody = { classId, title };
       response = await request(app).post("/assignments").send(requestBody);
     });
 
-    then('the request should return a validation error', () => {
+    then('I should get a validation error', () => {
       expect(response.status).toBe(400);
       expect(response.body.error).toBe(Errors.ValidationError);
     });
@@ -77,12 +77,12 @@ defineFeature(feature, (test) => {
       title = assignmentTitle;
     });
 
-    when('I send a request to create an assignment with no class id', async () => {
+    when('I try to create an assignment without providing a class ID', async () => {
       requestBody = { title };
       response = await request(app).post("/assignments").send(requestBody);
     });
 
-    then('the request should return a validation error', () => {
+    then('I should get a validation error', () => {
       expect(response.status).toBe(400);
       expect(response.body.error).toBe(Errors.ValidationError);
     });

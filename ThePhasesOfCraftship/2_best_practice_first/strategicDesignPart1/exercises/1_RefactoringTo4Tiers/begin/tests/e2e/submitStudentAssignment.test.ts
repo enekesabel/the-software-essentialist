@@ -35,7 +35,7 @@ defineFeature(feature, (test) => {
 
         givenIHaveAStudentAssignment({given});
 
-        when('I send a request to submit the student assignment', async () => {
+        when('I try to submit the student assignment', async () => {
             requestBody = { id: studentAssignment.id };
             response = await request(app).post("/student-assignments/submit").send(requestBody);
         });
@@ -54,12 +54,12 @@ defineFeature(feature, (test) => {
 
         givenIHaveAStudentAssignment({given});
 
-        when('I send a request to submit a non-existent student assignment', async () => {
+        when('I try to submit a non-existent student assignment', async () => {
             requestBody = { id: "non-existent-student-assignment-id" };
             response = await request(app).post("/student-assignments/submit").send(requestBody);
         });
 
-        then('the request should return an assignment not found error', () => {
+        then('I should get an assignment not found error', () => {
             expect(response.status).toBe(404);
             expect(response.body.error).toBe(Errors.AssignmentNotFound);
         });
@@ -71,11 +71,11 @@ defineFeature(feature, (test) => {
 
         givenIHaveAStudentAssignment({given});
 
-        when('I send a request to submit a student assignment with missing student assignment ID', async () => {
+        when('I try to submit a student assignment without providing a student assignment ID', async () => {
             response = await request(app).post("/student-assignments/submit").send(requestBody);
         });
 
-        then('the request should return a validation error', () => {
+        then('I should get a validation error', () => {
             expect(response.status).toBe(400);
             expect(response.body.error).toBe(Errors.ValidationError);
         });

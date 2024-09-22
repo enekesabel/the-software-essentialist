@@ -9,21 +9,21 @@ Feature: Assign Student to Assignment
         And I have an assignment
 
     Scenario: Successfully assign a student to an assignment
-        When I send a request to assign the student to the assignment
+        When I assign the student to the assignment
         Then the student should be assigned to the assignment successfully
 
     Scenario: Fail to assign a non-existent student to an assignment
-        When I send a request to assign a non-existent student to the assignment
-        Then the request should return a student not found error
+        When I try to assign a non-existent student to an assignment
+        Then I should get a student not found error
 
     Scenario: Fail to assign a student to a non-existent assignment
-        When I send a request to assign the student to a non-existent assignment
-        Then the request should return an assignment not found error
+        When I try to assign a student to a non-existent assignment
+        Then I should get an assignment not found error
 
     Scenario: Fail to assign a student to an assignment with missing student ID
-        When I send a request to assign a student to the assignment with missing student ID
-        Then the request should return a validation error
+        When I try to assign a student to an assignment without providing a student ID
+        Then I should get a validation error
 
     Scenario: Fail to assign a student to an assignment with missing assignment ID
-        When I send a request to assign the student to an assignment with missing assignment ID
-        Then the request should return a validation error
+        When I try to assign a student to an assignment without providing an assignment ID
+        Then I should get a validation error

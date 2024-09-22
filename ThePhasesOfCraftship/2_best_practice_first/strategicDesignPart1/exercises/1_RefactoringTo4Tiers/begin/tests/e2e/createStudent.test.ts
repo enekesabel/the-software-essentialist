@@ -1,6 +1,6 @@
 
 import request from "supertest";
-import { app } from "../../src";
+import { app, Errors } from "../../src";
 import { defineFeature, loadFeature } from "jest-cucumber";
 import path from "path";
 import supertest from "supertest";
@@ -28,7 +28,7 @@ defineFeature(feature, (test) => {
           };
         });
 
-        when("I send a request to create a student", async () => {
+        when('I try to create the student', async () => {
           response = await request(app).post("/students").send(requestBody);
         });
 
@@ -39,7 +39,7 @@ defineFeature(feature, (test) => {
       });
 
 
-    test('Fail to create a student', ({ given, when, then }) => {
+    test('Fail to create a student with no name', ({ given, when, then }) => {
         let requestBody: any = {};
         let response: supertest.Response;
 
@@ -47,13 +47,13 @@ defineFeature(feature, (test) => {
             requestBody = {};
         });
 
-        when('I send a request to create a student', async () => {
+        when('I try to create the student', async () => {
             response = await request(app).post("/students").send(requestBody);
         });
 
-        then('the student should not be created', () => {
+        then('I should get a validation error', () => {
             expect(response.status).toBe(400);
-            expect(response.body.error).toBe('ValidationError');
+            expect(response.body.error).toBe(Errors.ValidationError);
         });
     });
 });

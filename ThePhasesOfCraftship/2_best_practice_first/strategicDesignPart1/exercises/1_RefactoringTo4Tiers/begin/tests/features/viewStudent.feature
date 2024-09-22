@@ -6,13 +6,13 @@ Feature: View Student
 
     Scenario: Successfully view a student
         Given I have a student
-        When I send a request to view the student
-        Then the request should return the student details and assignments
+        When I try to view the student
+        Then I should get the student details and assignments
 
     Scenario: View a non-existent student
-        When I send a request to view a non-existent student
-        Then the request should return 404
+        When I try to view a non-existent student
+        Then I should get a student not found error
 
     Scenario: View student with invalid id
-        When I send a request to view a student with invalid id
-        Then the request should return a validation error
+        When I try to view a student by providing an invalid student ID
+        Then I should get a validation error

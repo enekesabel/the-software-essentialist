@@ -28,11 +28,11 @@ defineFeature(feature, (test) => {
             students[1] = await new StudentBuilder().withName('John Doe').build();
         });
 
-        when('I send a request to view all students', async () => {
+        when('I try to view all students', async () => {
             response = await request(app).get("/students");
         });
 
-        then('the request should return a list of students', () => {
+        then('I should get the full list of students', () => {
             expect(response.status).toBe(200);
             expect(response.body.data.length).toBe(2);
             expect(response.body.data[0]).toHaveProperty("name", students[0].name);
