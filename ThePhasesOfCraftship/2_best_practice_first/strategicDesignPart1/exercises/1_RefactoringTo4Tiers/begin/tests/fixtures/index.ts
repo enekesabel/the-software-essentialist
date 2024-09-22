@@ -1,4 +1,5 @@
-export { resetDatabase } from './reset';
 export { ClassRoomBuilder } from './ClassRoomBuilder';
-export { StudentBuilder } from './StudentBuilder';
 export { AssignmentBuilder } from './AssignmentBuilder';
+export { StudentBuilder } from './StudentBuilder';
+export { StudentAssignmentBuilder } from './StudentAssignmentBuilder';
+export { resetDatabase } from './reset'
