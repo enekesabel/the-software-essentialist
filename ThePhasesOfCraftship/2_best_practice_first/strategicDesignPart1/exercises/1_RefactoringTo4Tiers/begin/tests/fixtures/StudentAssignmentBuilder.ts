@@ -36,7 +36,7 @@ export class StudentAssignmentBuilder {
       data: {
         studentId: student?.id || '',
         assignmentId: assignment?.id || '',
-        grade: this.studentAssignment.grade || '',
+        grade: this.studentAssignment.grade,
         status: this.studentAssignment.status || '',
       },
     });
