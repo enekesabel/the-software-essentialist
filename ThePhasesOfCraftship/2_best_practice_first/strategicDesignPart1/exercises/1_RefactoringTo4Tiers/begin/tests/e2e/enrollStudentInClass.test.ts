@@ -25,13 +25,13 @@ defineFeature(feature, (test) => {
     let studentId: string;
     let classId: string;
 
-    given('I have a student with name "John Doe"', async () => {
-      const student = await new StudentBuilder().withName("John Doe").build();
+    given(/^I have a student with name "(.*)"$/, async (studentName) => {
+      const student = await new StudentBuilder().withName(studentName).build();
       studentId = student.id;
     });
 
-    and('I have a class with name "Math 101"', async () => {
-      const classRoom = await new ClassRoomBuilder().withName("Math 101").build();
+    and(/^I have a class with name "(.*)"$/, async (className) => {
+      const classRoom = await new ClassRoomBuilder().withName(className).build();
       classId = classRoom.id;
     });
 
@@ -52,8 +52,8 @@ defineFeature(feature, (test) => {
     let response: supertest.Response;
     let classId: string;
 
-    given('I have a class with name "Math 101"', async () => {
-      const classRoom = await new ClassRoomBuilder().withName("Math 101").build();
+    given(/^I have a class with name "(.*)"$/, async (className) => {
+      const classRoom = await new ClassRoomBuilder().withName(className).build();
       classId = classRoom.id;
     });
 
@@ -73,8 +73,8 @@ defineFeature(feature, (test) => {
     let response: supertest.Response;
     let studentId: string;
 
-    given('I have a student with name "John Doe"', async () => {
-      const student = await new StudentBuilder().withName("John Doe").build();
+    given(/^I have a student with name "(.*)"$/, async (studentName) => {
+      const student = await new StudentBuilder().withName(studentName).build();
       studentId = student.id;
     });
 
@@ -94,8 +94,8 @@ defineFeature(feature, (test) => {
     let response: supertest.Response;
     let classId: string;
 
-    given('I have a class with name "Math 101"', async () => {
-      const classRoom = await new ClassRoomBuilder().withName("Math 101").build();
+    given(/^I have a class with name "(.*)"$/, async (className) => {
+      const classRoom = await new ClassRoomBuilder().withName(className).build();
       classId = classRoom.id;
     });
 
@@ -115,8 +115,8 @@ defineFeature(feature, (test) => {
     let response: supertest.Response;
     let studentId: string;
 
-    given('I have a student with name "John Doe"', async () => {
-      const student = await new StudentBuilder().withName("John Doe").build();
+    given(/^I have a student with name "(.*)"$/, async (studentName) => {
+      const student = await new StudentBuilder().withName(studentName).build();
       studentId = student.id;
     });
 
@@ -131,4 +131,3 @@ defineFeature(feature, (test) => {
     });
   });
 });
-
