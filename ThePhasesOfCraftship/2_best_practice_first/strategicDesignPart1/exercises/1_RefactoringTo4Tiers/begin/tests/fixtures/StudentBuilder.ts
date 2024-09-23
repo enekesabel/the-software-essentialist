@@ -1,7 +1,13 @@
 import { Student } from "@prisma/client";
 import { prisma } from "../../src/database";
+import { faker } from "@faker-js/faker";
 
 export class StudentBuilder {
+    
+    static Fake() {
+        return new StudentBuilder()
+        .withName(faker.person.fullName());
+    }
 
     private student = {} as Student;
 

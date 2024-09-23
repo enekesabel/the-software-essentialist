@@ -1,8 +1,15 @@
 import { Assignment, Class } from "@prisma/client";
 import { prisma } from "../../src/database";
 import { ClassRoomBuilder } from "./ClassRoomBuilder";
+import { faker } from "@faker-js/faker";
 
 export class AssignmentBuilder {
+  static Fake() {
+    return new AssignmentBuilder()
+    .withTitle(`${faker.company.buzzNoun()} Test`)
+    .andClassRoom(ClassRoomBuilder.Fake());
+  }
+
   private assignment = {} as Assignment;
   private classRoomOrBuilder?: ClassRoomBuilder | Class
 
@@ -26,4 +33,5 @@ export class AssignmentBuilder {
     });
     return createdAssignment;
   }
+
 }

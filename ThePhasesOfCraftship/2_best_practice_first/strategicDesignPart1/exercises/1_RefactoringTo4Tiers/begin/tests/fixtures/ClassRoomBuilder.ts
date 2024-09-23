@@ -1,7 +1,13 @@
 import { Class } from "@prisma/client";
 import { prisma } from "../../src/database";
+import { faker } from '@faker-js/faker';
 
 export class ClassRoomBuilder {
+
+    static Fake() {
+        return new ClassRoomBuilder()
+        .withName(faker.company.buzzNoun());
+    }
 
     private classRoom = {} as Class;
 

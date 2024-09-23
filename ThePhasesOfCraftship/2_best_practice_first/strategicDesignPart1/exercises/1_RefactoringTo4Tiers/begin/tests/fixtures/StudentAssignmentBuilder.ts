@@ -4,6 +4,13 @@ import { AssignmentBuilder } from './AssignmentBuilder';
 import { StudentBuilder } from './StudentBuilder';
 
 export class StudentAssignmentBuilder {
+
+  static Fake() {
+    return new StudentAssignmentBuilder()
+    .fromAssignment(AssignmentBuilder.Fake())
+    .andStudent(StudentBuilder.Fake());
+  }
+
   private studentAssignment = {} as StudentAssignment;
   private studentOrBuilder?: StudentBuilder | Student;
   private assignmentOrBuilder?: AssignmentBuilder | Assignment;
@@ -40,5 +47,5 @@ export class StudentAssignmentBuilder {
         status: this.studentAssignment.status || '',
       },
     });
-  }
+  } 
 }
