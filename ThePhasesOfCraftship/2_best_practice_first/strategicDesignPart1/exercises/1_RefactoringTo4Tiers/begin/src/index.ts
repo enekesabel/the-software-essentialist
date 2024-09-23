@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const Errors = {
+export const Errors = {
     ValidationError: 'ValidationError',
     StudentNotFound: 'StudentNotFound',
     ClassNotFound: 'ClassNotFound',
@@ -464,6 +464,8 @@ app.get('/student/:id/grades', async (req: Request, res: Response) => {
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+export { server as app };

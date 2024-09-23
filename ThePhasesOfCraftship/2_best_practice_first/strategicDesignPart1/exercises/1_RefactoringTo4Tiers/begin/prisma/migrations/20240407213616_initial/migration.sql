@@ -55,3 +55,6 @@ CREATE TABLE "ClassGradeReport" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ClassGradeReport_classId_key" ON "ClassGradeReport"("classId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Class_name_key" ON "Class"("name");
