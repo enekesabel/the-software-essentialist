@@ -3,7 +3,7 @@ import path from "path";
 import supertest from "supertest";
 import request from "supertest";
 import { app, Errors } from "../../src";
-import { resetDatabase, AssignmentBuilder, ClassRoomBuilder } from "../fixtures";
+import { resetDatabase, AssignmentBuilder } from "../fixtures";
 import { Assignment } from "@prisma/client";
 
 const feature = loadFeature(
@@ -24,10 +24,7 @@ defineFeature(feature, (test) => {
         let response: supertest.Response;
 
         given('I have an assignment', async() => {
-            assignment = await new AssignmentBuilder()
-            .withTitle('Math Test')
-            .andClassRoom(new ClassRoomBuilder().withName('Math Class'))
-            .build();
+            assignment = await AssignmentBuilder.Fake().build();
         });
 
         when('I try to view the assignment', async () => {

@@ -23,7 +23,7 @@ defineFeature(feature, (test) => {
         let response: supertest.Response;
 
         given('I have a student', async() => {
-            student = await new StudentBuilder().withName('John Doe').build();
+            student = await StudentBuilder.Fake().build();
         });
 
         when('I try to view the student', async () => {

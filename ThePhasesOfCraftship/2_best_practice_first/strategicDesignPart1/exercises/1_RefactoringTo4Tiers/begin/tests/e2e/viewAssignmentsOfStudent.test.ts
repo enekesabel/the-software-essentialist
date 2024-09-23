@@ -3,7 +3,7 @@ import path from "path";
 import supertest from "supertest";
 import request from "supertest";
 import { app, Errors } from "../../src";
-import { AssignmentBuilder, ClassRoomBuilder, resetDatabase, StudentAssignmentBuilder, StudentBuilder } from "../fixtures";
+import { resetDatabase, StudentAssignmentBuilder, StudentBuilder } from "../fixtures";
 import { StudentAssignment, Student } from "@prisma/client";
 
 const feature = loadFeature(
@@ -25,12 +25,11 @@ defineFeature(feature, (test) => {
         let response: supertest.Response;
 
         given('I have a student with submitted student assignments', async() => {
-            student = await new StudentBuilder().withName('John Doe').build();
-            const classRoom = await new ClassRoomBuilder().withName('Math Class').build();
-            const algebraAssignment = await new AssignmentBuilder().withTitle('Algebra Assignment').andClassRoom(classRoom).build();
-            const geometryAssignment = await new AssignmentBuilder().withTitle('Geometry Assignment').andClassRoom(classRoom).build();
-            studentAssignments[0] = await new StudentAssignmentBuilder().fromAssignment(algebraAssignment).andStudent(student).withStatus('submitted').build();
-            studentAssignments[1] = await new StudentAssignmentBuilder().fromAssignment(geometryAssignment).andStudent(student).build();
+            student = await StudentBuilder.Fake().build();
+            
+            studentAssignments[0] = await StudentAssignmentBuilder.Fake().andStudent(student).withStatus('submitted').build();
+            studentAssignments[1] = await StudentAssignmentBuilder.Fake().andStudent(student).withStatus('submitted').build();
+            studentAssignments[2] = await StudentAssignmentBuilder.Fake().andStudent(student).build();
         });
 
         when('I try to view all submitted assignments of the student', async () => {
@@ -39,8 +38,9 @@ defineFeature(feature, (test) => {
 
         then('I should get a list of their submitted assignments', () => {
             expect(response.status).toBe(200);
-            expect(response.body.data.length).toBe(1);
+            expect(response.body.data.length).toBe(2);
             expect(response.body.data[0]).toHaveProperty('id', studentAssignments[0].id);
+            expect(response.body.data[1]).toHaveProperty('id', studentAssignments[1].id);
         });
     });
 

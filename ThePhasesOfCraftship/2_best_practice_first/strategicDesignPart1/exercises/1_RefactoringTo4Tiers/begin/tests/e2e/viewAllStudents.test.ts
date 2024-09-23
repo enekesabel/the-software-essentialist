@@ -24,8 +24,8 @@ defineFeature(feature, (test) => {
         let response: supertest.Response;
 
         given('I have students', async() => {
-            students[0] = await new StudentBuilder().withName('Jane Doe').build();
-            students[1] = await new StudentBuilder().withName('John Doe').build();
+            students[0] = await StudentBuilder.Fake().build();
+            students[1] = await StudentBuilder.Fake().build();
         });
 
         when('I try to view all students', async () => {

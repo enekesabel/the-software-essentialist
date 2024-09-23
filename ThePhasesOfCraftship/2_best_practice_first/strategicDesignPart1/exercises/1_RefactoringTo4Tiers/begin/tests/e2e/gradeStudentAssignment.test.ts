@@ -3,7 +3,7 @@ import path from "path";
 import supertest from "supertest";
 import request from "supertest";
 import { app, Errors } from "../../src";
-import { resetDatabase, AssignmentBuilder, ClassRoomBuilder, StudentBuilder, StudentAssignmentBuilder } from "../fixtures";
+import { resetDatabase, StudentAssignmentBuilder } from "../fixtures";
 import { StudentAssignment } from "@prisma/client";
 
 const feature = loadFeature(
@@ -22,11 +22,7 @@ defineFeature(feature, (test) => {
 
     const givenIHaveAStudentAssignment = ({given}:{given: DefineStepFunction}) => {
         given('I have a submitted student assignment', async() => {
-            studentAssignment = await new StudentAssignmentBuilder()
-            .fromAssignment(new AssignmentBuilder().withTitle('Math Assignment').andClassRoom(new ClassRoomBuilder().withName('Math Class')))
-            .withStatus('submitted')
-            .andStudent(new StudentBuilder().withName('John Doe'))
-            .build();
+            studentAssignment = await StudentAssignmentBuilder.Fake().withStatus('submitted').build();
         });
     }
 

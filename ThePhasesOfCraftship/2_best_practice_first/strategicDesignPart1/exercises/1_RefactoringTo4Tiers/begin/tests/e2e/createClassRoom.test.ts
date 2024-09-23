@@ -1,5 +1,4 @@
 import request from "supertest";
-//import { Response } from "express";
 import { app, Errors } from "../../src";
 
 import { defineFeature, loadFeature } from "jest-cucumber";

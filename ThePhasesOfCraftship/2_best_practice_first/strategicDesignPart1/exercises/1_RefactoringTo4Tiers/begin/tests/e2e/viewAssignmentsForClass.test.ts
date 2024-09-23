@@ -25,9 +25,9 @@ defineFeature(feature, (test) => {
         let response: supertest.Response;
 
         given('I have assignments for a class', async() => {
-            classRoom = await new ClassRoomBuilder().withName('Math Class').build();
-            assignments[0] = await new AssignmentBuilder().withTitle('Assignment 1').andClassRoom(classRoom).build();
-            assignments[1] = await new AssignmentBuilder().withTitle('Assignment 2').andClassRoom(classRoom).build();
+            classRoom = await ClassRoomBuilder.Fake().build();
+            assignments[0] = await AssignmentBuilder.Fake().andClassRoom(classRoom).build();
+            assignments[1] = await AssignmentBuilder.Fake().andClassRoom(classRoom).build();
         });
 
         when('I try to view all assignments for a class', async () => {
